@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 6</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section>
+<section id="slide-org38c38ec">
+<h2 id="org38c38ec">Chapter 6</h2>
+<div class="outline-text-2" id="text-org38c38ec">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org97c26b6">
+<h3 id="org97c26b6">Eq Instances</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data TisAnInteger = TisAn Integer
+
+instance Eq TisAnInteger where 
+  (==) (TisAn a) (TisAn b) = a == b
+
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >
+data TwoIntegers = Two Integer Integer
+
+instance Eq TwoIntegers where
+  (==) (Two a b) (Two x y) = a == x && b == y
+
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >
+data StringOrInt =
+    TisAnInt   Int
+  | TisAString String
+
+instance Eq StringOrInt where
+  (==) (TisAString s) (TisAString t) = s == t
+  (==) (TisAnInt   i) (TisAnInt   j) = i == j
+  (==) _              _              = False
+
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >
+data Pair a = Pair a a
+
+instance Eq a => Eq (Pair a) where
+  (==) (Pair a b) (Pair c d)  = a == c && b == d
+
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >
+data Tuple a b = Tuple a b
+
+instance (Eq a, Eq b) => Eq (Tuple a b) where
+  (==) (Tuple a b) (Tuple c d) = a == c && b == d
+
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >
+data Which a =
+    ThisOne a
+  | ThatOne a
+
+instance Eq a => Eq (Which a) where
+  (==) (ThisOne a) (ThisOne b) = a == b
+  (==) (ThatOne a) (ThatOne b) = a == b
+  (==) _           _           = False
+
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >
+data EitherOr a b =
+    Hello a
+  | Goodbye b
+
+instance (Eq a, Eq b) => Eq (EitherOr a b) where
+  (==) (Hello x)   (Hello y)   = x == y
+  (==) (Goodbye x) (Goodbye y) = x == y
+  (==) _           _           = False
+
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgacf2727">
+<h3 id="orgacf2727">Tuple Experiment</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >Prelude> let x = 11
+Prelude> let y = 10
+Prelude> let z = 4
+Prelude> quotRem x z
+(2,3)
+Prelude> divMod (negate x) (negate z)
+(2,-3)
+Prelude> divMod x z
+(2,3)
+Prelude> quotRem (negate x) z
+(-2,-3)
+Prelude> divMod (negate x) z
+(-3,1)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org73a50ab">
+<h3 id="org73a50ab">Will They Work?</h3>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >max (length [1, 2, 3]) (length [8, 9, 10, 11, 12])
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >max 3 5
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >5
+</code></pre>
+</div>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >compare (3 * 4) (3 * 5)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >compare 12 15
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >LT
+</code></pre>
+</div>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >compare "Julie" True
+</code></pre>
+</div>
+<p class="fragment">
+Will not compile - the arguments must be of the same type
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >(5 + 3) > (3 + 6)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >8 > 9
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >False
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org664a137">
+<h3 id="org664a137">Chapter Exercises</h3>
+<div class="outline-text-3" id="text-org664a137">
+</div>
+</section>
+<section id="slide-org2268233">
+<h4 id="org2268233">Multiple Choice</h4>
+</section>
+<section >
+<hr />
+<p>
+The <code>Eq</code> class 
+</p>
+<ul>
+<li>includes all types in Haskell</li>
+<li>is the same as the <code>Ord</code> class</li>
+<li><b>makes equality tests possible</b></li>
+<li>only includes numeric types</li>
+
+</ul>
+
+</section>
+<section >
+<hr />
+<p>
+The typeclass <code>Ord</code>
+</p>
+<ul>
+<li>allows any two values to be compared</li>
+<li><b>is a subclass of <code>Eq</code></b></li>
+<li>is a superclass of <code>Eq</code></li>
+<li>has no instance for <code>Bool</code></li>
+
+</ul>
+
+</section>
+<section >
+<hr />
+<p>
+Suppose the typeclass <code>Ord</code> has an operator <code>&gt;</code>. What is the type of <code>&gt;</code>?
+</p>
+<ul>
+<li><b><code>Ord a =&gt; a -&gt; a -&gt; Bool</code></b></li>
+<li><code>Ord a =&gt; Int -&gt; Bool</code></li>
+<li><code>Ord a =&gt; a -&gt; Char</code></li>
+<li><code>Ord a =&gt; Char -&gt; [Char]</code></li>
+
+</ul>
+
+</section>
+<section >
+<hr />
+<p>
+In <code>x = divMod 16 12</code>
+</p>
+<ul>
+<li>the type of <code>x</code> is <code>Integer</code></li>
+<li>the value of <code>x</code> is undecidable</li>
+<li><b>the type of <code>x</code> is a tuple</b></li>
+<li><code>x</code> is equal to <code>12/16</code></li>
+
+</ul>
+
+</section>
+<section >
+<hr />
+<p>
+The typeclass <code>Integral</code> includes
+</p>
+<ul>
+<li><b><code>Int</code> and <code>Integer</code> numbers</b></li>
+<li>integral, real, and fractional numbers</li>
+<li>Schrodinger's cat</li>
+<li>only positive numbers</li>
+
+</ul>
+
+</section>
+<section id="slide-org9100130">
+<h4 id="org9100130">Does it typecheck?</h4>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Person = Person Bool
+
+printPerson :: Persion -> IO ()
+printPerson person = putStrLn (show person)
+</code></pre>
+</div>
+<p class="fragment">
+Will not compile - no instance of <code>Show</code> for <code>Person</code>
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Mood = Blah
+          | Woot deriving Show
+
+settleDown x = if x == Woot
+               then Blah
+               else x
+</code></pre>
+</div>
+<p class="fragment">
+Will not typecheck because no instance of <code>Eq</code> for <code>Mood</code>
+</p>
+
+</section>
+<section >
+<hr />
+<p>
+Getting <code>settleDown</code> to compile&#x2026;
+</p>
+<p class="fragment">
+Add an <code>Eq</code> typeclass to the <code>deriving</code> block
+</p>
+<ol class="fragment">
+<li>Acceptable inputs: <code>Mood</code></li>
+<li><code>settledown 9</code> will produce a type error</li>
+<li><code>Blah &gt; Woot</code> will produce a type error because there is no <code>Ord</code> instance</li>
+
+</ol>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >type Subject = String; type Verb = String, type Object = String
+
+data Sentence = Sentence Subject Verb Object
+  deriving (Eq, Show)
+
+s1 = Sentence "dogs" "drool"
+s2 = Sentence "Julie" "loves" "dogs"
+</code></pre>
+</div>
+<p class="fragment">
+It does typecheck, but you will get a warning in the REPL when <code>s1</code> is assigned. 
+</p>
+
+</section>
+<section id="slide-orgdef1ea2">
+<h4 id="orgdef1ea2">Given a datatype declaration, what can we do?</h4>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Rocks = Rocks String deriving (Eq, Show)
+data Yeah = Yeah Bool deriving (Eq, Show)
+data Papu = Papu Rocks Yeah deriving (Eq, Show)
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >phew = Papu "chases" True
+</code></pre>
+</div>
+<p class="fragment">
+Will not typecheck - needs to be 
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >phew = Papu (Rocks "chases") (Yeah True)
+</code></pre>
+</div>
+
+<hr />
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >truth = Papu (Rocks "chomskydoz")
+             (Yeah True)
+</code></pre>
+</div>
+<p class="fragment">
+Typechecks!
+</p>
+
+<hr />
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >equalityForAll :: Papu -> Papu -> Bool
+equalityForAll p p' = p == p'
+</code></pre>
+</div>
+<p class="fragment">
+Typechecks!
+</p>
+
+<hr />
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >comparePapus :: Papu -> Papu -> Bool
+comparePapus p p' = p > p'
+</code></pre>
+</div>
+<p class="fragment">
+Will not typecheck - need an <code>Ord</code> instance for <code>Papu</code>
+</p>
+
+</section>
+<section id="slide-org502da44">
+<h4 id="org502da44">Match the types</h4>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >i :: Num a => a 
+i = 1
+-- 
+i :: a
+</code></pre>
+</div>
+<p class="fragment">
+Does not work, since i needs a <code>Num</code> instance
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >f :: Float
+f = 1.0
+
+f :: Num a => a
+</code></pre>
+</div>
+<p class="fragment">
+Does not work, since f needs a <code>Fractional</code> instance
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >f :: Float
+f = 1.0 
+
+f :: Fractional a => a
+</code></pre>
+</div>
+<p class="fragment">
+Correct
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >f :: Float
+f = 1.0
+
+f :: RealFrac a => a
+</code></pre>
+</div>
+<p class="fragment">
+This works, since both <code>Real</code> and <code>Fractional</code> instances exist for 1.0
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >freud :: a -> a
+freud x = x
+
+freud :: Ord a => a -> a
+</code></pre>
+</div>
+<p class="fragment">
+Works, even though not using any functions from <code>Ord</code>
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >freud' :: a -> a
+freud' x = x
+
+freud' :: Int -> Int
+</code></pre>
+</div>
+<p class="fragment">
+Works - restricting the type
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >myX = 1 :: Int
+sigmund :: Int -> Int
+sigmund x = myX
+
+sigmund :: a -> a
+</code></pre>
+</div>
+<p class="fragment">
+Does not typecheck - has to return an Int
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >myX = 1 :: Int
+sigmund' :: Int -> Int
+sigmund' x = myX
+
+sigmund' :: Num a => a -> a
+</code></pre>
+</div>
+<p class="fragment">
+Does not typecheck - <code>Num</code> is still wider than <code>Int</code>.  The concrete type has been applied.
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >jung :: Ord a => [a] -> a
+jung xs = head (sort xs)
+
+jung :: [Int] -> Int
+</code></pre>
+</div>
+<p class="fragment">
+Typechecks - <code>Int</code> has an <code>Ord</code> instance
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >young :: [Char] -> Char
+young xs = head (sort xs)
+
+young :: Ord a => [a] -> a
+</code></pre>
+</div>
+<p class="fragment">
+Typechecks
+</p>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >mySort :: [Char] -> [Char]
+mySort = sort
+signifier :: [Char] -> Char
+signifier xs = head (mySort xs)
+
+signifier :: Ord a => [a] -> a
+</code></pre>
+</div>
+<p class="fragment">
+Does not typecheck - mySort requires a <code>[Char]</code>, not <code>[Ord a =&gt; a]</code>
+</p>
+
+</section>
+<section id="slide-org206977e">
+<h4 id="org206977e">Type-Kwon-Do Two :: Electric Typealoo</h4>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >chk :: Eq b => (a -> b) -> a -> b -> Bool
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >chk f a b = f(a) == b
+</code></pre>
+</div>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >arith :: Num b
+      => (a -> b)
+      -> Integer
+      -> a
+      -> b
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >arith f' i a = f'(a) ^ i
+</code></pre>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

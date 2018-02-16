@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 5</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section>
+<section id="slide-org0778e59">
+<h2 id="org0778e59">Chapter 5</h2>
+<div class="outline-text-2" id="text-org0778e59">
+</div>
+</section>
+<section id="slide-org1ded8c3">
+<h3 id="org1ded8c3">Type Matching</h3>
+<ul>
+<li>a -&gt; c</li>
+<li>b -&gt; d</li>
+<li>c -&gt; b</li>
+<li>d -&gt; a</li>
+<li>e -&gt; e</li>
+
+</ul>
+
+</section>
+<section id="slide-org7aad554">
+<h3 id="org7aad554">Type Arguments</h3>
+<ol>
+<li>a</li>
+<li>d</li>
+<li>d</li>
+<li>c</li>
+<li>a</li>
+<li>e</li>
+<li>d</li>
+<li>a</li>
+<li>c</li>
+
+</ol>
+
+</section>
+</section>
+<section>
+<section id="slide-org61b607f">
+<h2 id="org61b607f">Week 2</h2>
+<div class="outline-text-2" id="text-org61b607f">
+</div>
+</section>
+<section id="slide-org6cd3a02">
+<h3 id="org6cd3a02">Parametricity</h3>
+<ol>
+<li>It just can't be done&#x2026;</li>
+<li><code>f :: a -&gt; a -&gt; a</code>
+<ul>
+<li><code>f x _ = x</code></li>
+<li><code>f _ y = y</code></li>
+
+</ul></li>
+<li><code>f :: a -&gt; b -&gt; b</code>
+<ul>
+<li><code>f  = _ -&gt; y -&gt; y</code></li>
+<li><code>f  _ = id</code></li>
+
+</ul></li>
+
+</ol>
+
+</section>
+<section id="slide-org23cd6c3">
+<h3 id="org23cd6c3">Apply Yourself</h3>
+<ol>
+<li><code>myConcat :: [Char] -&gt; [Char]</code></li>
+<li><code>myMult :: Fractional a =&gt; a -&gt; a</code></li>
+<li><code>myTake :: Int -&gt; [Char]</code></li>
+<li><code>myCom :: Int -&gt; Bool</code></li>
+<li><code>myAlph :: Char -&gt; Bool</code></li>
+
+</ol>
+
+</section>
+<section id="slide-orgf50b0d0">
+<h3 id="orgf50b0d0">Chapter Exercises</h3>
+<div class="outline-text-3" id="text-orgf50b0d0">
+</div>
+</section>
+<section id="slide-orgc2f5f8d">
+<h4 id="orgc2f5f8d">Multiple Choice</h4>
+<ol>
+<li>c</li>
+<li>a</li>
+<li>b</li>
+<li>c</li>
+
+</ol>
+
+</section>
+<section id="slide-org5fdcfd6">
+<h4 id="org5fdcfd6">Determine the type</h4>
+<pre  class="example">
+54 :: Num a =&gt; a
+(0, "doge") :: Num a =&gt; (a, [Char])
+(0, "doge") :: (Integer, [Char])
+False :: Bool
+5 :: Int
+False :: Bool
+</pre>
+
+</section>
+<section >
+<ol>
+<li><code>w :: Num a =&gt; a</code></li>
+<li><code>z :: Num a =&gt; a -&gt; a</code></li>
+<li><code>f :: Fractional a =&gt; a</code></li>
+<li><code>f :: [Char]</code></li>
+
+</ol>
+
+</section>
+<section id="slide-orgf83e4f3">
+<h4 id="orgf83e4f3">Does it compile?</h4>
+<p>
+<code>1</code>. No. <code>bigNum</code> is not a Function.  You could do:
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >bigNum x = (^) 5 $ x 
+wahoo = bigNum 10
+</code></pre>
+</div>
+
+</section>
+<section >
+<p>
+<code>2</code>. Compiles just fine
+</p>
+
+</section>
+<section >
+<p>
+<code>3</code>. Does not compile. The problem is in line 3 - <code>b</code> is not a function.
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >a = (+)
+c = a 10
+d = c 200
+</code></pre>
+</div>
+
+</section>
+<section >
+<p>
+<code>4</code>. Does not compile. <code>b</code> and <code>c</code> are not defined. No obvious values are available.
+</p>
+
+</section>
+<section id="slide-org59a205d">
+<h4 id="org59a205d">Type Variable or specific type constructor?</h4>
+<p>
+<code>2</code>. <code>f :: zed -&gt; Zed -&gt; Blah</code>
+</p>
+<dl>
+<dt>zed</dt><dd>unconstrained</dd>
+<dt>Zed</dt><dd>concrete</dd>
+<dt>Blah</dt><dd>concrete</dd>
+
+</dl>
+
+</section>
+<section >
+<p>
+<code>3</code>. <code>f :: Enum b =&gt; a -&gt; b -&gt; C</code>
+</p>
+<dl>
+<dt>a</dt><dd>unconstrained</dd>
+<dt>b</dt><dd>constrained</dd>
+<dt>C</dt><dd>concrete</dd>
+
+</dl>
+
+</section>
+<section >
+<p>
+<code>4</code>. <code>f :: f -&gt; g -&gt; C</code>
+</p>
+<dl>
+<dt>f</dt><dd>unconstrained</dd>
+<dt>g</dt><dd>unconstrained</dd>
+<dt>C</dt><dd>concrete</dd>
+
+</dl>
+
+</section>
+<section id="slide-org9f09fef">
+<h4 id="org9f09fef">Write a type signature</h4>
+<ol>
+<li><code>functionH :: [a] -&gt; a</code></li>
+<li><code>functionC :: Ord a =&gt; a -&gt; a -&gt; Bool</code></li>
+<li><code>functionS :: (a, b) -&gt; b</code></li>
+
+</ol>
+
+</section>
+<section id="slide-org0c5faca">
+<h4 id="org0c5faca">Given a type, write the function</h4>
+<p>
+<code>1</code>. <code>i :: a -&gt; a</code>
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >i a = a -- id
+</code></pre>
+</div>
+</section>
+<section >
+
+<p>
+<code>2</code>. <code>c :: a -&gt; b -&gt; a</code>
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >c a b = a -- const
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>3</code>. <code>c'' :: b -&gt; a -&gt; b</code>
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >c'' b a = b -- Same as #2
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>4</code>. <code>c' :: a -&gt; b -&gt; b</code>
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >c' a b = b
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>5</code>. <code>r :: [a] -&gt; [a]</code>
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >r = id
+r = reverse
+r = tail
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>6</code>. <code>co :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c</code>
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >co = (.)
+co bc ab a = bc . ab $ a
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>7</code>. <code>a :: (a -&gt; c) -&gt; a -&gt; a</code>
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >a _ a = a
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>8</code>. <code>a' :: (a -&gt; b) -&gt; a -&gt; b</code>
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >a' = ($)
+a' ab a = ab $ a
+-- Arseniy also pointed out that you could use id here.  
+a' = id
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgc5d4181">
+<h4 id="orgc5d4181">Fix it</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >module Sing where
+
+fstString :: [Char] -> [Char]
+fstString x = x ++ " in the rain"
+
+sndString :: [Char] -> [Char]
+sndString x = x ++ " over the rainbow"
+
+sing = if (x > y) then fstString x else sndString y
+  where x = "Singin'"
+        y = "Somewhere"
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >module Sing where
+
+fstString :: [Char] -> [Char]
+fstString x = x ++ " in the rain"
+
+sndString :: [Char] -> [Char]
+sndString x = x ++ " over the rainbow"
+
+-- sing = if (x > y) then fstString x else sndString y
+sing = if (x < y) then fstString x else sndString y
+  where x = "Singin'"
+        y = "Somewhere"
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >module Arith3Broken where
+
+main :: IO()
+main = do
+  print (1 + 2)
+  putStrLn "10"
+  print (negate (-1))
+  print ((+) 0 blah)
+    where blah = negate 1
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org2b0c871">
+<h4 id="org2b0c871">Type-Kwon-Do</h4>
+<p>
+<code>1</code>.
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >f :: Int -> String; f = undefined
+g :: String -> Char; g = undefined
+h :: Int -> Char
+h i = g . f $ i
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>2</code>.
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data A; data B; data C
+q :: A -> B ; q = undefined
+w :: B -> C ; w = undefined
+e :: A -> C
+e a = w . q $ a
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>3</code>. 
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data X; data Y; data Z
+xz :: X -> Z ; xz = undefined
+yz :: Y -> Z ; yz = undefined
+xform :: (X, Y) -> (Z, Z) 
+xform (x, y) = (xz x, yz y)
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+<code>4</code>.
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >munge :: (x -> y) 
+      -> (y -> (w, z))
+      -> x
+      -> w
+munge xy ywz x = fst . ywz . xy $ x
+</code></pre>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
