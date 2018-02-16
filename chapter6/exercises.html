@@ -7,18 +7,18 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
 
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
 
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
 <!-- If the query includes 'print-pdf', include the PDF print sheet -->
 <script>
     if( window.location.search.match( /print-pdf/gi ) ) {
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
@@ -28,15 +28,15 @@
 <div class="slides">
 
 <section>
-<section id="slide-org38c38ec">
-<h2 id="org38c38ec">Chapter 6</h2>
-<div class="outline-text-2" id="text-org38c38ec">
+<section id="slide-org5c47cbf">
+<h2 id="org5c47cbf">Chapter 6</h2>
+<div class="outline-text-2" id="text-org5c47cbf">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org97c26b6">
-<h3 id="org97c26b6">Eq Instances</h3>
+<section id="slide-org60a16c4">
+<h3 id="org60a16c4">Eq Instances</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >data TisAnInteger = TisAn Integer
@@ -140,8 +140,8 @@ instance (Eq a, Eq b) => Eq (EitherOr a b) where
 </section>
 </section>
 <section>
-<section id="slide-orgacf2727">
-<h3 id="orgacf2727">Tuple Experiment</h3>
+<section id="slide-org997f66f">
+<h3 id="org997f66f">Tuple Experiment</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >Prelude> let x = 11
@@ -163,8 +163,8 @@ Prelude> divMod (negate x) z
 </section>
 </section>
 <section>
-<section id="slide-org73a50ab">
-<h3 id="org73a50ab">Will They Work?</h3>
+<section id="slide-orgb28986c">
+<h3 id="orgb28986c">Will They Work?</h3>
 </section>
 <section >
 <hr />
@@ -237,13 +237,13 @@ Will not compile - the arguments must be of the same type
 </section>
 </section>
 <section>
-<section id="slide-org664a137">
-<h3 id="org664a137">Chapter Exercises</h3>
-<div class="outline-text-3" id="text-org664a137">
+<section id="slide-org844eb28">
+<h3 id="org844eb28">Chapter Exercises</h3>
+<div class="outline-text-3" id="text-org844eb28">
 </div>
 </section>
-<section id="slide-org2268233">
-<h4 id="org2268233">Multiple Choice</h4>
+<section id="slide-org4689e20">
+<h4 id="org4689e20">Multiple Choice</h4>
 </section>
 <section >
 <hr />
@@ -315,8 +315,8 @@ The typeclass <code>Integral</code> includes
 </ul>
 
 </section>
-<section id="slide-org9100130">
-<h4 id="org9100130">Does it typecheck?</h4>
+<section id="slide-orgccd670b">
+<h4 id="orgccd670b">Does it typecheck?</h4>
 </section>
 <section >
 <hr />
@@ -384,8 +384,8 @@ It does typecheck, but you will get a warning in the REPL when <code>s1</code> i
 </p>
 
 </section>
-<section id="slide-orgdef1ea2">
-<h4 id="orgdef1ea2">Given a datatype declaration, what can we do?</h4>
+<section id="slide-orgf9608f9">
+<h4 id="orgf9608f9">Given a datatype declaration, what can we do?</h4>
 </section>
 <section >
 <div class="org-src-container">
@@ -452,8 +452,8 @@ Will not typecheck - need an <code>Ord</code> instance for <code>Papu</code>
 </p>
 
 </section>
-<section id="slide-org502da44">
-<h4 id="org502da44">Match the types</h4>
+<section id="slide-orgce14bb6">
+<h4 id="orgce14bb6">Match the types</h4>
 </section>
 <section >
 <div class="org-src-container">
@@ -623,8 +623,8 @@ Does not typecheck - mySort requires a <code>[Char]</code>, not <code>[Ord a =&g
 </p>
 
 </section>
-<section id="slide-org206977e">
-<h4 id="org206977e">Type-Kwon-Do Two :: Electric Typealoo</h4>
+<section id="slide-org413711a">
+<h4 id="org413711a">Type-Kwon-Do Two :: Electric Typealoo</h4>
 </section>
 <section >
 <hr />
@@ -660,8 +660,8 @@ Does not typecheck - mySort requires a <code>[Char]</code>, not <code>[Ord a =&g
 </section>
 </div>
 </div>
-<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
-<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
 
 <script>
 // Full list of configuration options available here:
@@ -688,8 +688,8 @@ multiplex: {
 
 // Optional libraries used to extend on reveal.js
 dependencies: [
- { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
- { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
 });
 </script>
 </body>

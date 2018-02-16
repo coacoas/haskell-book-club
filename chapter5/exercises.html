@@ -7,18 +7,18 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
 
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
 
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
 <!-- If the query includes 'print-pdf', include the PDF print sheet -->
 <script>
     if( window.location.search.match( /print-pdf/gi ) ) {
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
@@ -28,13 +28,13 @@
 <div class="slides">
 
 <section>
-<section id="slide-org0778e59">
-<h2 id="org0778e59">Chapter 5</h2>
-<div class="outline-text-2" id="text-org0778e59">
+<section id="slide-org5f9a52f">
+<h2 id="org5f9a52f">Chapter 5</h2>
+<div class="outline-text-2" id="text-org5f9a52f">
 </div>
 </section>
-<section id="slide-org1ded8c3">
-<h3 id="org1ded8c3">Type Matching</h3>
+<section id="slide-orgf6da89e">
+<h3 id="orgf6da89e">Type Matching</h3>
 <ul>
 <li>a -&gt; c</li>
 <li>b -&gt; d</li>
@@ -45,8 +45,8 @@
 </ul>
 
 </section>
-<section id="slide-org7aad554">
-<h3 id="org7aad554">Type Arguments</h3>
+<section id="slide-org1c674e7">
+<h3 id="org1c674e7">Type Arguments</h3>
 <ol>
 <li>a</li>
 <li>d</li>
@@ -63,13 +63,13 @@
 </section>
 </section>
 <section>
-<section id="slide-org61b607f">
-<h2 id="org61b607f">Week 2</h2>
-<div class="outline-text-2" id="text-org61b607f">
+<section id="slide-org9d447bc">
+<h2 id="org9d447bc">Week 2</h2>
+<div class="outline-text-2" id="text-org9d447bc">
 </div>
 </section>
-<section id="slide-org6cd3a02">
-<h3 id="org6cd3a02">Parametricity</h3>
+<section id="slide-orgd5e3e7d">
+<h3 id="orgd5e3e7d">Parametricity</h3>
 <ol>
 <li>It just can't be done&#x2026;</li>
 <li><code>f :: a -&gt; a -&gt; a</code>
@@ -88,8 +88,8 @@
 </ol>
 
 </section>
-<section id="slide-org23cd6c3">
-<h3 id="org23cd6c3">Apply Yourself</h3>
+<section id="slide-orgf773377">
+<h3 id="orgf773377">Apply Yourself</h3>
 <ol>
 <li><code>myConcat :: [Char] -&gt; [Char]</code></li>
 <li><code>myMult :: Fractional a =&gt; a -&gt; a</code></li>
@@ -100,13 +100,13 @@
 </ol>
 
 </section>
-<section id="slide-orgf50b0d0">
-<h3 id="orgf50b0d0">Chapter Exercises</h3>
-<div class="outline-text-3" id="text-orgf50b0d0">
+<section id="slide-org0388ee6">
+<h3 id="org0388ee6">Chapter Exercises</h3>
+<div class="outline-text-3" id="text-org0388ee6">
 </div>
 </section>
-<section id="slide-orgc2f5f8d">
-<h4 id="orgc2f5f8d">Multiple Choice</h4>
+<section id="slide-org7398954">
+<h4 id="org7398954">Multiple Choice</h4>
 <ol>
 <li>c</li>
 <li>a</li>
@@ -116,8 +116,8 @@
 </ol>
 
 </section>
-<section id="slide-org5fdcfd6">
-<h4 id="org5fdcfd6">Determine the type</h4>
+<section id="slide-orgaa9d735">
+<h4 id="orgaa9d735">Determine the type</h4>
 <pre  class="example">
 54 :: Num a =&gt; a
 (0, "doge") :: Num a =&gt; (a, [Char])
@@ -138,8 +138,8 @@ False :: Bool
 </ol>
 
 </section>
-<section id="slide-orgf83e4f3">
-<h4 id="orgf83e4f3">Does it compile?</h4>
+<section id="slide-org2f9b1c5">
+<h4 id="org2f9b1c5">Does it compile?</h4>
 <p>
 <code>1</code>. No. <code>bigNum</code> is not a Function.  You could do:
 </p>
@@ -176,8 +176,8 @@ d = c 200
 </p>
 
 </section>
-<section id="slide-org59a205d">
-<h4 id="org59a205d">Type Variable or specific type constructor?</h4>
+<section id="slide-org81fe44e">
+<h4 id="org81fe44e">Type Variable or specific type constructor?</h4>
 <p>
 <code>2</code>. <code>f :: zed -&gt; Zed -&gt; Blah</code>
 </p>
@@ -213,8 +213,8 @@ d = c 200
 </dl>
 
 </section>
-<section id="slide-org9f09fef">
-<h4 id="org9f09fef">Write a type signature</h4>
+<section id="slide-org9fee506">
+<h4 id="org9fee506">Write a type signature</h4>
 <ol>
 <li><code>functionH :: [a] -&gt; a</code></li>
 <li><code>functionC :: Ord a =&gt; a -&gt; a -&gt; Bool</code></li>
@@ -223,8 +223,8 @@ d = c 200
 </ol>
 
 </section>
-<section id="slide-org0c5faca">
-<h4 id="org0c5faca">Given a type, write the function</h4>
+<section id="slide-org8aae6a0">
+<h4 id="org8aae6a0">Given a type, write the function</h4>
 <p>
 <code>1</code>. <code>i :: a -&gt; a</code>
 </p>
@@ -312,8 +312,8 @@ a' = id
 </div>
 
 </section>
-<section id="slide-orgc5d4181">
-<h4 id="orgc5d4181">Fix it</h4>
+<section id="slide-org82ceec1">
+<h4 id="org82ceec1">Fix it</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >module Sing where
@@ -366,8 +366,8 @@ main = do
 </div>
 
 </section>
-<section id="slide-org2b0c871">
-<h4 id="org2b0c871">Type-Kwon-Do</h4>
+<section id="slide-org5759e37">
+<h4 id="org5759e37">Type-Kwon-Do</h4>
 <p>
 <code>1</code>.
 </p>
@@ -405,6 +405,7 @@ xz :: X -> Z ; xz = undefined
 yz :: Y -> Z ; yz = undefined
 xform :: (X, Y) -> (Z, Z) 
 xform (x, y) = (xz x, yz y)
+xform = \(x, y) -> (xz x, yz y)
 </code></pre>
 </div>
 </section>
@@ -425,8 +426,8 @@ munge xy ywz x = fst . ywz . xy $ x
 </section>
 </div>
 </div>
-<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
-<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
 
 <script>
 // Full list of configuration options available here:
@@ -453,8 +454,8 @@ multiplex: {
 
 // Optional libraries used to extend on reveal.js
 dependencies: [
- { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
- { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
 });
 </script>
 </body>
