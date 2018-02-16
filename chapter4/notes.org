@@ -1,0 +1,48 @@
+* Haskell Book Chapter 4
+
+** Exercises 
+- ~`not True && true`~ => `true` needs to be capitalized
+- ~`not (x = 6)`~ => Should use (~==~) instead
+- ~(1 * 2) > 5~ => compiles (`False`)
+- ~[Merry] > [Happy]~ -- error "data constructor not in scope"
+- ~[1, 2, 3] ++ "look at me!"~ -- type error, ~['1', '2', '3'] =++= "look at me!"~ works
+
+
+** Chapter Exercises
+1. ~length :: [a] -> Int~
+2. Answers:
+   a) 5
+   b) 3
+   c) 2
+   d) 5
+3. ~6 / 3~ works because 3 can be coerced(?) into a Fractional value,
+   while ~Int~ (the return type of ~length~) can not. You can see the
+   same with the following:
+#+BEGIN_SRC haskell
+Prelude> let a = 3 :: Int
+Prelude> 6 / a
+#+END_SRC
+4. Use ~div 6 $ length [1, 2, 3]~
+5. ~Bool~ / ~True~
+6. ~Bool~ / ~False~
+7.
+    - length allAwesome == 2 :: ~True~
+    - length [1, 'a', 3, 'b'] :: Type error
+    - length allAwesome + length awesome :: 5
+    - (8 == 8) && ('b' < 'a') :: ~False~
+    - (8 == 8) && 9 :: Type error
+8. ~ChapterExercises.isPalindrome~
+9. ~ChapterExercises.myAbs~
+10. ~ChapterExercises.f~
+
+*** Correcting Syntax
+
+See ChapterExercises.hs
+
+*** Match the function names to their types
+
+1. a
+2. b
+3. a
+4. d
+

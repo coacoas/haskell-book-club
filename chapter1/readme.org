@@ -1,0 +1,130 @@
+* Chapter 1 Exercises
+
+** Intermission: Equivalence Exercises 
+*** Equivalence
+
+- 1 -> b through alpha equivalence
+- 2 -> c from explicit currying
+- 3 -> b through alpha equivalence
+
+** Chapter Exercises
+*** Combinators
+1. +
+2. -
+3. +
+4. +
+5. -
+
+*** Normal Form or Diverge? 
+1. Normal Form
+2. Diverge
+3. Normal Form
+
+*** Beta Reduce
+
+#+BEGIN_SRC 
+(\abc.cba)zz(\wv.w)
+[a = z, b = z | \c.czz](\wv.w)
+[c = \wv.w | (\wv.w)zz]
+[w = z, v = z | z]
+z
+#+END_SRC
+
+#+BEGIN_SRC 
+(\x.\y.xyy)(\a.a)b
+[x = \a.a, y = b | (\a.a)(b)b]
+[a = b | bb]
+bb
+#+END_SRC
+
+#+BEGIN_SRC 
+(\y.y)(\x.xx)(\z.zq)
+[y = \x.xx | \x.xx(\z.zq)]
+[x = \z.zq | (\z.zq)(\z.zq)]
+[z = \z.zq | (\z.zq)q]
+[z = q | qq]
+qq
+#+END_SRC
+
+#+BEGIN_SRC 
+(\z.z)(\z.zz)(\z.zy)
+(\a.a)(\b.bb)(\c.cy)
+[a = \b.bb | (\b.bb)(\c.cy)]
+[b = \c.cy | (\c.cy)(\c.cy)]
+[c = \c.cy | (\c.cy)y]
+[c = y | yy ]
+yy
+#+END_SRC
+
+#+BEGIN_SRC 
+(\x.\y.xyy)(\y.y)y
+[x = \y.y | (\y.(\y.y)yy)y ]
+[y = y | ((\y.y)y)y ]
+[y = y | yy]
+yy
+#+END_SRC
+
+#+BEGIN_SRC 
+(\a.aa)(\b.ba)c
+[a = \b.ba | (\b.ba)(\b.ba)c ]
+[b = \b.ba | (\b.ba)ac ]
+[b = a | aac ]
+aac
+#+END_SRC
+
+#+BEGIN_SRC 
+(\xyz.xz(yz))(\x.z)(\x.a)
+(\x.\y.\z.xz(yz))(\x.z)(\x.a)
+[x = \x.z | (\y\z1(\x.z)z1(yz1))(\x.a)]
+[y = \x.a | (\z1.z((\x.a)z1)) ]
+[x = z1 | \z1.za]
+\z1.za
+#+END_SRC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(\xyz.xz(yz))(\x.z)(\x.a)
+(\s.\t.\u.su(tu))(\x.z)(\x.a)
+[s := \x.z]  (\t.\u.(\x.z)(u)(tu))(\x.a)
+[t := \x.a]  (\u.(\x.z)(u)((\x.a)u)
+[x := u]     (\u.z((\x.a)u))
+[x := u]     \u.za
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
