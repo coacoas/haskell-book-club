@@ -7,18 +7,18 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
 
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
 
-<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
 <!-- If the query includes 'print-pdf', include the PDF print sheet -->
 <script>
     if( window.location.search.match( /print-pdf/gi ) ) {
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
     }
 </script>
@@ -28,20 +28,20 @@
 <div class="slides">
 
 <section>
-<section id="slide-org0dd4f2f">
-<h2 id="org0dd4f2f">Chapter 7</h2>
-<div class="outline-text-2" id="text-org0dd4f2f">
+<section id="slide-org76300a5">
+<h2 id="org76300a5">Chapter 7</h2>
+<div class="outline-text-2" id="text-org76300a5">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgd673346">
-<h3 id="orgd673346">Grab Bag</h3>
-<div class="outline-text-3" id="text-orgd673346">
+<section id="slide-org9825e44">
+<h3 id="org9825e44">Grab Bag</h3>
+<div class="outline-text-3" id="text-org9825e44">
 </div>
 </section>
-<section id="slide-orgc38a61c">
-<h4 id="orgc38a61c">Which of the following are equivalent?</h4>
+<section id="slide-orgb24274f">
+<h4 id="orgb24274f">Which of the following are equivalent?</h4>
 <ul>
 <li><b><code>mTh x y z = x * y * z</code></b></li>
 
@@ -54,8 +54,8 @@
 </ul>
 
 </section>
-<section id="slide-org3b3658d">
-<h4 id="org3b3658d">Which is the type of <code>mth 3</code>?</h4>
+<section id="slide-org3b78a00">
+<h4 id="org3b78a00">Which is the type of <code>mth 3</code>?</h4>
 <div class="org-src-container">
 
 <pre class="fragment"><code class="haskell" >Num a => a -> a -> a
@@ -63,8 +63,8 @@
 </div>
 
 </section>
-<section id="slide-org4b3a914">
-<h4 id="org4b3a914">Rewrite the function:</h4>
+<section id="slide-orga027753">
+<h4 id="orga027753">Rewrite the function:</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >addOneIfOdd  n = case n of
@@ -104,8 +104,8 @@
 </section>
 </section>
 <section>
-<section id="slide-orgb4ca66c">
-<h3 id="orgb4ca66c">Variety Pack</h3>
+<section id="slide-org39c42d2">
+<h3 id="org39c42d2">Variety Pack</h3>
 </section>
 <section >
 <hr />
@@ -142,8 +142,8 @@ k3 :: Num a => a
 </section>
 </section>
 <section>
-<section id="slide-org7e10a7d">
-<h3 id="org7e10a7d">Case Practice</h3>
+<section id="slide-org0ffde65">
+<h3 id="org0ffde65">Case Practice</h3>
 </section>
 <section >
 <hr />
@@ -193,8 +193,8 @@ k3 :: Num a => a
 </section>
 </section>
 <section>
-<section id="slide-org987e5c7">
-<h3 id="org987e5c7">Artful Dodgy</h3>
+<section id="slide-org134ac86">
+<h3 id="org134ac86">Artful Dodgy</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >let dodgy x y = x + y * 10
@@ -321,8 +321,8 @@ let oneIsTwo = (flip dodgy) 2
 </section>
 </section>
 <section>
-<section id="slide-orgcdb5ca4">
-<h3 id="orgcdb5ca4">Guard Duty</h3>
+<section id="slide-org521762b">
+<h3 id="org521762b">Guard Duty</h3>
 <ol>
 <li class="fragment appear"><code>otherwise</code> as the top guard will match all inputs</li>
 <li class="fragment appear">Since the guards only involve the lower bound, reordering will return incorrect values</li>
@@ -338,13 +338,13 @@ let oneIsTwo = (flip dodgy) 2
 </section>
 </section>
 <section>
-<section id="slide-orgeaf266b">
-<h3 id="orgeaf266b">Chapter Exercises</h3>
-<div class="outline-text-3" id="text-orgeaf266b">
+<section id="slide-org96b4339">
+<h3 id="org96b4339">Chapter Exercises</h3>
+<div class="outline-text-3" id="text-org96b4339">
 </div>
 </section>
-<section id="slide-orgb8805b7">
-<h4 id="orgb8805b7">Multiple Choice</h4>
+<section id="slide-orgad77131">
+<h4 id="orgad77131">Multiple Choice</h4>
 </section>
 <section >
 <hr />
@@ -358,8 +358,8 @@ let oneIsTwo = (flip dodgy) 2
 </ol>
 
 </section>
-<section id="slide-orgfcd9df3">
-<h4 id="orgfcd9df3">Let's write code</h4>
+<section id="slide-org683e86d">
+<h4 id="org683e86d">Let's write code</h4>
 </section>
 <section >
 <hr />
@@ -384,8 +384,8 @@ xDigit d x = d'
 <pre class="fragment"><code class="haskell" >-- Suggested by Tyler - pass in which digit to ensure a power of 10
 xDigit' :: Integral a => a -> a -> a
 xDigit' d x = d' 
-  where (xLast, _) = divMod x (10 ^ d)
-        (_, d') = divMod xLast 10
+  where xLast = div x (10 ^ d)
+        d'    = mod xLast 10
 tensDigit'' = xDigit' 1
 hundredsDigit'' = xDigit' 2
 </code></pre>
@@ -406,8 +406,8 @@ foldBool x y b = case b of
 
 <pre class="fragment"><code class="haskell" >foldBoolG :: a -> a -> Bool -> a
 foldBoolG x y b
-  | b = y
-  | otherwise = x
+  | b     = y
+  | not b = x
 </code></pre>
 </div>
 </section>
@@ -448,15 +448,15 @@ roundTripAB = read . show
 
 <pre class="fragment"><code class="haskell" >main :: IO ()
 main = do
-  print ((roundTripAB 4) :: Float)
+  print ((roundTripAB 4 :: Float)
 </code></pre>
 </div>
 </section>
 </section>
 </div>
 </div>
-<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
-<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
 
 <script>
 // Full list of configuration options available here:
@@ -483,8 +483,8 @@ multiplex: {
 
 // Optional libraries used to extend on reveal.js
 dependencies: [
- { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
- { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
 });
 </script>
 </body>
