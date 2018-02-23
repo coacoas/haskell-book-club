@@ -1,4 +1,4 @@
-#+OPTIONS: num:nil toc:nil reveal_title_slide:nil
+#+OPTIONS: num:nil toc:nil
 #+REVEAL_TRANS: slide
 #+REVEAL_THEME: sky
 #+REVEAL_PLUGINS: (highlight notes)
@@ -7,8 +7,6 @@
 #+Title: Chapter 7
 #+Author: Bill Carlson
 #+Email: bill.carlson@cotiviti.com
-
-* Chapter 7
 
 ** Grab Bag
 
