@@ -1,0 +1,307 @@
+#+OPTIONS: num:nil toc:nil reveal_title_slide:nil
+#+REVEAL_TRANS: slide
+#+REVEAL_THEME: sky
+#+REVEAL_PLUGINS: (highlight notes)
+#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+REVEAL_HLEVEL: 2
+#+Title: Chapter 7
+#+Author: Bill Carlson
+#+Email: bill.carlson@cotiviti.com
+
+* Chapter 7
+
+** Grab Bag
+
+*** Which of the following are equivalent? 
+
+- *~mTh x y z = x * y * z~*
+
+- *~mTh x y = \z x * y * z~*
+
+- *~mTh x = \y -> \z -> x * y * z~*
+
+- *~mTh = \x -> \y -> \z -> x * y * z~*
+
+*** Which is the type of ~mth 3~?
+
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+Num a => a -> a -> a
+#+END_SRC
+
+*** Rewrite the function: 
+#+BEGIN_SRC haskell
+addOneIfOdd  n = case n of
+  True -> f n 
+  False -> n
+  where f n = n + 1 
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+f = \n -> n + 1
+#+END_SRC
+
+#+BEGIN_SRC haskell
+addFive x y = (if x > y then y else x) + 5
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+addFive = \x -> \y -> (if x > y then y else x) + 5
+#+END_SRC
+
+#+BEGIN_SRC haskell
+nflip f = \x -> \y -> f y x
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+nflip f x y = f y x
+#+END_SRC
+
+** Variety Pack
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+let k (x, y) = x
+let k1 = k ((4 - 1), 10)
+let k2 = k ("three", (1 + 2))
+let k3 = k (3, True)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+k :: (a, b) -> a
+k1 :: Num a => a
+k2 :: [Char]
+k3 :: Num a => a
+#+END_SRC
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+f :: (a, b, c) -> (d, e, f) -> ((a, d), (c, f))
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+f (a, _, c) (d, _, f) = ((a, d), (c, f))
+#+END_SRC
+
+** Case Practice 
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+functionC x y = if (x > y) then x else y
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+functionC x y = case (x > y) of
+  True -> x
+  False -> y
+#+END_SRC
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+ifEvenAdd2 n = if even n then (n + 2) else n
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+ifEvenAdd2 n = case even n of 
+  True -> (n + 2)
+  False -> n
+#+END_SRC
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+nums x = case compare x 0 of
+  LT -> -1
+  GT -> 1
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+  EQ -> 0
+#+END_SRC
+
+** Artful Dodgy
+#+BEGIN_SRC haskell
+let dodgy x y = x + y * 10
+let oneIsOne = dodgy 1
+let oneIsTwo = (flip dodgy) 2
+#+END_SRC
+
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+dodgy 1 1 
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+11
+#+END_SRC
+------
+#+BEGIN_SRC haskell
+dodgy 2 2
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+22
+#+END_SRC
+------
+#+BEGIN_SRC haskell
+dodgy 1 2
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+21
+#+END_SRC
+------
+#+BEGIN_SRC haskell
+dodgy 2 1
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+12
+#+END_SRC
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+oneIsOne 1
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+11
+#+END_SRC
+------
+#+BEGIN_SRC haskell
+oneIsOne 2
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+21
+#+END_SRC
+------
+#+BEGIN_SRC haskell
+oneIsTwo 1
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+12
+#+END_SRC
+------
+#+BEGIN_SRC haskell
+oneIsTwo 2
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+22
+#+END_SRC
+------
+#+BEGIN_SRC haskell
+oneIsOne 3
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+13
+#+END_SRC
+------
+#+BEGIN_SRC haskell
+oneIsTwo 3
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+23
+#+END_SRC
+
+** Guard Duty
+
+#+ATTR_REVEAL: :frag (appear)
+1. ~otherwise~ as the top guard will match all inputs
+2. Since the guards only involve the lower bound, reordering will return incorrect values
+3. (b) ~True~ when ~xs~ is a palindrome
+4. ~Eq a => [a]~
+5. ~pal :: Eq a => [a] -> Bool~
+6. (c) An indication of whether its argument is positive or negative or zero
+7. ~(Num a, Ord a) => a~
+8. ~numbers :: (Num a, Num b, Ord a) => a -> b~
+
+** Chapter Exercises
+
+*** Multiple Choice
+#+REVEAL: split
+------
+#+ATTR_REVEAL: :frag (appear)
+1. A polymorphic function: (d) may resolve to values of different types, depending on inputs
+2. ~Char -> String~ / ~String -> [String]~: (b) ~Char -> [String]~
+3. (d) (Num a, Ord a) => a -> Bool
+4. A function :: ~(a -> b) -> c~ : (b) is a higer-order function
+5. ~f x = x~ : (a) ~f True :: Bool~
+
+*** Let's write code
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+tensDigit' :: Integral a => a -> a
+tensDigit' x = d
+  where (xLast, _) = divMod x 10
+        (_, d) = divMod xLast 10
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+xDigit :: Integral a => a -> a -> a
+xDigit d x = d' 
+  where (xLast, _) = divMod x d
+        (_, d') = divMod xLast 10
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+-- Suggested by Tyler - pass in which digit to ensure a power of 10
+xDigit' :: Integral a => a -> a -> a
+xDigit' d x = d' 
+  where xLast = div x (10 ^ d)
+        d'    = mod xLast 10
+tensDigit'' = xDigit' 1
+hundredsDigit'' = xDigit' 2
+#+END_SRC
+
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+foldBool :: a -> a -> Bool -> a
+foldBool x y b = case b of
+  False -> x
+  True -> y
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldBoolG :: a -> a -> Bool -> a
+foldBoolG x y b
+  | b     = y
+  | not b = x
+#+END_SRC
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+g :: (a -> b) -> (a, c) -> (b, c)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+g f (a, c) = (f(a), c)
+#+END_SRC
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+roundTrip :: (Show a, Read a) => a -> a
+roundTrip a = read (show a)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+roundTripPF :: (Show a, Read a) => a -> a
+roundTripPF = read . show
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+roundTripAB :: (Show a, Read b) => a -> b
+roundTripAB = read . show
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+main :: IO ()
+main = do
+  print ((roundTripAB 4 :: Float)
+#+END_SRC

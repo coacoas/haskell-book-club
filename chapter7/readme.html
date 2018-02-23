@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 7</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section>
+<section id="slide-org0dd4f2f">
+<h2 id="org0dd4f2f">Chapter 7</h2>
+<div class="outline-text-2" id="text-org0dd4f2f">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd673346">
+<h3 id="orgd673346">Grab Bag</h3>
+<div class="outline-text-3" id="text-orgd673346">
+</div>
+</section>
+<section id="slide-orgc38a61c">
+<h4 id="orgc38a61c">Which of the following are equivalent?</h4>
+<ul>
+<li><b><code>mTh x y z = x * y * z</code></b></li>
+
+<li><b><code>mTh x y = \z x * y * z</code></b></li>
+
+<li><b><code>mTh x = \y -&gt; \z -&gt; x * y * z</code></b></li>
+
+<li><b><code>mTh = \x -&gt; \y -&gt; \z -&gt; x * y * z</code></b></li>
+
+</ul>
+
+</section>
+<section id="slide-org3b3658d">
+<h4 id="org3b3658d">Which is the type of <code>mth 3</code>?</h4>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >Num a => a -> a -> a
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org4b3a914">
+<h4 id="org4b3a914">Rewrite the function:</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >addOneIfOdd  n = case n of
+  True -> f n 
+  False -> n
+  where f n = n + 1 
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >f = \n -> n + 1
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre><code class="haskell" >addFive x y = (if x > y then y else x) + 5
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >addFive = \x -> \y -> (if x > y then y else x) + 5
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre><code class="haskell" >nflip f = \x -> \y -> f y x
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >nflip f x y = f y x
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb4ca66c">
+<h3 id="orgb4ca66c">Variety Pack</h3>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >let k (x, y) = x
+let k1 = k ((4 - 1), 10)
+let k2 = k ("three", (1 + 2))
+let k3 = k (3, True)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >k :: (a, b) -> a
+k1 :: Num a => a
+k2 :: [Char]
+k3 :: Num a => a
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >f :: (a, b, c) -> (d, e, f) -> ((a, d), (c, f))
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >f (a, _, c) (d, _, f) = ((a, d), (c, f))
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org7e10a7d">
+<h3 id="org7e10a7d">Case Practice</h3>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >functionC x y = if (x > y) then x else y
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >functionC x y = case (x > y) of
+  True -> x
+  False -> y
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >ifEvenAdd2 n = if even n then (n + 2) else n
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >ifEvenAdd2 n = case even n of 
+  True -> (n + 2)
+  False -> n
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >nums x = case compare x 0 of
+  LT -> -1
+  GT -> 1
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >EQ -> 0
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org987e5c7">
+<h3 id="org987e5c7">Artful Dodgy</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >let dodgy x y = x + y * 10
+let oneIsOne = dodgy 1
+let oneIsTwo = (flip dodgy) 2
+</code></pre>
+</div>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >dodgy 1 1 
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >11
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >dodgy 2 2
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >22
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >dodgy 1 2
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >21
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >dodgy 2 1
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >12
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >oneIsOne 1
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >11
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >oneIsOne 2
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >21
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >oneIsTwo 1
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >12
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >oneIsTwo 2
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >22
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >oneIsOne 3
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >13
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >oneIsTwo 3
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >23
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgcdb5ca4">
+<h3 id="orgcdb5ca4">Guard Duty</h3>
+<ol>
+<li class="fragment appear"><code>otherwise</code> as the top guard will match all inputs</li>
+<li class="fragment appear">Since the guards only involve the lower bound, reordering will return incorrect values</li>
+<li class="fragment appear">(b) <code>True</code> when <code>xs</code> is a palindrome</li>
+<li class="fragment appear"><code>Eq a =&gt; [a]</code></li>
+<li class="fragment appear"><code>pal :: Eq a =&gt; [a] -&gt; Bool</code></li>
+<li class="fragment appear">(c) An indication of whether its argument is positive or negative or zero</li>
+<li class="fragment appear"><code>(Num a, Ord a) =&gt; a</code></li>
+<li class="fragment appear"><code>numbers :: (Num a, Num b, Ord a) =&gt; a -&gt; b</code></li>
+
+</ol>
+
+</section>
+</section>
+<section>
+<section id="slide-orgeaf266b">
+<h3 id="orgeaf266b">Chapter Exercises</h3>
+<div class="outline-text-3" id="text-orgeaf266b">
+</div>
+</section>
+<section id="slide-orgb8805b7">
+<h4 id="orgb8805b7">Multiple Choice</h4>
+</section>
+<section >
+<hr />
+<ol>
+<li class="fragment appear">A polymorphic function: (d) may resolve to values of different types, depending on inputs</li>
+<li class="fragment appear"><code>Char -&gt; String</code> / <code>String -&gt; [String]</code>: (b) <code>Char -&gt; [String]</code></li>
+<li class="fragment appear">(d) (Num a, Ord a) =&gt; a -&gt; Bool</li>
+<li class="fragment appear">A function :: <code>(a -&gt; b) -&gt; c</code> : (b) is a higer-order function</li>
+<li class="fragment appear"><code>f x = x</code> : (a) <code>f True :: Bool</code></li>
+
+</ol>
+
+</section>
+<section id="slide-orgfcd9df3">
+<h4 id="orgfcd9df3">Let's write code</h4>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >tensDigit' :: Integral a => a -> a
+tensDigit' x = d
+  where (xLast, _) = divMod x 10
+        (_, d) = divMod xLast 10
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >xDigit :: Integral a => a -> a -> a
+xDigit d x = d' 
+  where (xLast, _) = divMod x d
+        (_, d') = divMod xLast 10
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >-- Suggested by Tyler - pass in which digit to ensure a power of 10
+xDigit' :: Integral a => a -> a -> a
+xDigit' d x = d' 
+  where (xLast, _) = divMod x (10 ^ d)
+        (_, d') = divMod xLast 10
+tensDigit'' = xDigit' 1
+hundredsDigit'' = xDigit' 2
+</code></pre>
+</div>
+
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >foldBool :: a -> a -> Bool -> a
+foldBool x y b = case b of
+  False -> x
+  True -> y
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >foldBoolG :: a -> a -> Bool -> a
+foldBoolG x y b
+  | b = y
+  | otherwise = x
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >g :: (a -> b) -> (a, c) -> (b, c)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >g f (a, c) = (f(a), c)
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >roundTrip :: (Show a, Read a) => a -> a
+roundTrip a = read (show a)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >roundTripPF :: (Show a, Read a) => a -> a
+roundTripPF = read . show
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >roundTripAB :: (Show a, Read b) => a -> b
+roundTripAB = read . show
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >main :: IO ()
+main = do
+  print ((roundTripAB 4) :: Float)
+</code></pre>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
