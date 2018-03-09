@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 9</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Chapter 9</h1><h2 class="author">Bill Carlson</h2><p class="date">Created: 2018-03-02 Fri 09:43</p>
+</section>
+
+</section>
+</section>
+<section>
+<section id="slide-orgebe9d15">
+<h3 id="orgebe9d15">EnumFromTo</h3>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >eftBool :: Bool -> Bool -> [Bool]
+eftBool start stop = go stop []
+  where go current acc
+         | current < start = reverse $ eftBool stop start
+         | current == start = current : acc
+         | otherwise = go (pred current) (current : acc)
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >eftOrd :: Ordering -> Ordering -> [Ordering]
+eftOrd start stop = go stop []
+  where go current acc
+         | current < start = reverse $ eftOrd stop start
+         | current == start = current : acc
+         | otherwise = go (pred current) (current : acc)
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >eftInt :: Int -> Int -> [Int]
+eftInt start stop = go stop []
+  where go current acc
+         | current < start = reverse $ eftInt stop start
+         | current == start = current : acc
+         | otherwise = go (pred current) (current : acc)
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >eftChar :: Char -> Char -> [Char]
+eftChar start stop = go stop []
+  where go current acc
+         | current < start = reverse $ eftChar stop start
+         | current == start = current : acc
+         | otherwise = go (pred current) (current : acc)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org27665bc">
+<h3 id="org27665bc">Thy Fearful Symmetry</h3>
+</section>
+<section >
+<p>
+Using takeWhile and dropWhile, write a function that takes a string
+and returns a list of strings, using spaces to separate the elements
+of the string into words, as in the following sample
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >myWords :: [Char] -> [[Char]]
+myWords s = go s []
+  where go [] acc = reverse acc
+        go (' ':remaining) acc = go (dropWhile (== ' ') remaining) acc
+        go remaining acc =
+          let word = takeWhile (/= ' ') remaining
+              next = drop (length word) remaining
+           in go next (word : acc)
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >myWords :: Char -> [Char] -> [[Char]]
+myWords delim s = go s []
+  where go [] acc = reverse acc
+        go remaining acc =
+          let cleared = dropWhile (== delim) remaining
+              word = takeWhile (/= delim) cleared
+              next = drop (length word) cleared
+           in go next (word : acc)
+
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org5289d9d">
+<h3 id="org5289d9d">Comprehend Thy Lists</h3>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >[x | x <- mySqr, rem x 2 == 0]
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >[4, 16, 36, 64, 100]
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >[(x, y) | x <- mySqr, y <- mySqr, x < 50, y > 50]
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >[(1,64),(1,81),(1,100), 
+ (4,64),(4,81),(4,100), 
+ (9,64),(9,81),(9,100), 
+ (16,64),(16,81),(16,100), 
+ (25,64),(25,81),(25,100), 
+ (36,64),(36,81),(36,100), 
+ (49,64),(49,81),(49,100)]
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 5 [ (x, y) | x <- mySqr, y <- mySqr, x < 50, y > 50 ]
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >[(1,64), (1,81), (1,100), (4,64), (4,81)]
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org333fd21">
+<h3 id="org333fd21">Square Cube</h3>
+</section>
+<section >
+<p>
+First write an expression that will make tuples of the outputs of <code>mySqr</code> and <code>myCube</code>.
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >[(x, y) | x <- mySqr, y <- myCube]
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+Now alter that expression so that it only uses the x and y values that are less than 50.
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >[(x, y) | x <- mySqr, y <- myCube, x < 50, y < 50]
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+Apply another function to that list comprehension to determine how
+many tuples inhabit your output list
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >length $ [(x, y) | x <- mySqr, y <- myCube, x < 50, y < 50]
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org2f385e9">
+<h3 id="org2f385e9">Bottom Madness</h3>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >[x^y | x <- [1..5], y <- [2, undefined]]
+</code></pre>
+</div>
+<p class="fragment">
+bottom
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 1 $ [x^y | x <- [1..5], y <- [2, undefined]]
+</code></pre>
+</div>
+<p class="fragment">
+[1]
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >sum [1, undefined, 3]
+</code></pre>
+</div>
+<p class="fragment">
+bottom
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >length [1, 2, undefined]
+</code></pre>
+</div>
+<p class="fragment">
+3
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >length $ [1, 2, 3] ++ undefined
+</code></pre>
+</div>
+<p class="fragment">
+bottom
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 1 $ filter even [1, 2, 3, undefined]
+</code></pre>
+</div>
+<p class="fragment">
+[2]
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 1 $ filter even [1, 3, undefined]
+</code></pre>
+</div>
+<p class="fragment">
+bottom
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 1 $ filter odd [1, 3, undefined]
+</code></pre>
+</div>
+<p class="fragment">
+[1]
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 2 $ filter odd [1, 3, undefined]
+</code></pre>
+</div>
+<p class="fragment">
+[1,3]
+</p>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 3 $ filter odd [1, 3, undefined]
+</code></pre>
+</div>
+<p class="fragment">
+bottom
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org5b36725">
+<h3 id="org5b36725">Intermission: Is It Normal Form?</h3>
+<ol>
+<li><code>[1, 2, 3, 4, 5]</code> :: NF</li>
+<li><code>1 : 2 : 3 : 4 : _</code> :: WHNF</li>
+<li><code>enumFromTo 1 10</code> :: Neither</li>
+<li><code>length [1, 2, 3, 4, 5]</code> :: WHNF</li>
+<li><code>sum (enumFromTo 1 10)</code> :: NF</li>
+<li><code>['a'..'m'] ++ ['n'..'z']</code> :: Neither</li>
+<li><code>(_, 'b')</code> :: NF</li>
+
+</ol>
+
+</section>
+</section>
+<section>
+<section id="slide-orgeb0b103">
+<h3 id="orgeb0b103">More Bottoms</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 1 $ map (+1) [undefined, 2, 3]
+</code></pre>
+</div>
+<p class="fragment">
+bottom
+</p>
+
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 1 $ map (+1) [1, undefined, 3]
+</code></pre>
+</div>
+<p class="fragment">
+[2]
+</p>
+
+<div class="org-src-container">
+
+<pre><code class="haskell" >take 2 $ map (+1) [1, undefined, 3]
+</code></pre>
+</div>
+<p class="fragment">
+bottom
+</p>
+
+</section>
+<section id="slide-orgebdca82">
+<h4 id="orgebdca82">What does this do?</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >itIsMystery xs = map (\x -> elem x "aeiou") xs
+</code></pre>
+</div>
+<p class="fragment">
+It returns a list of booleans, indicating whether the corresponding letter is a vowel or not
+</p>
+
+</section>
+<section id="slide-org04375f2">
+<h4 id="org04375f2">What is the result of this function?</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >map (^2) [1..10]
+</code></pre>
+</div>
+<p class="fragment">
+[1,4,9,16,25,36,49,64,81,100]
+</p>
+
+<div class="org-src-container">
+
+<pre><code class="haskell" >map minimum [[1..10], [10..20], [20..30]]
+</code></pre>
+</div>
+<p class="fragment">
+[1,10,20]
+</p>
+
+<div class="org-src-container">
+
+<pre><code class="haskell" >map sum [[1..5], [1..5], [1..5]]
+</code></pre>
+</div>
+<p class="fragment">
+[15, 15, 15]
+</p>
+
+<ul class="org-ul">
+<li><a id="org6faffbf"></a><code>foldBool</code><br />
+<div class="org-src-container">
+
+<pre><code class="haskell" >map (\x -> bool x (-x) (x == 3)) [1..10]
+</code></pre>
+</div>
+</li>
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org1668023">
+<h3 id="org1668023">Filtering</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >threes = filter (\x -> mod x 3 == 0)
+threes [1..30]
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >howManyThrees = length . threes
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >myFilter xs = filter notArticles wordList
+  where articles = ["a", "an", "the"]
+        notArticles x = not $ elem x articles
+        wordList = myWords ' ' xs
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org866d022">
+<h3 id="org866d022">Zipping</h3>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >zip' :: [a] -> [b] -> [(a, b)]
+zip' (x:xs) (y:ys) = ((x,y) : zip' xs ys)
+zip' _      _      = []
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >zipWith' :: [a] -> [b] -> [(a, b)]
+zipWith' (x:xs) (y:ys) = ((x,y) : zip' xs ys)
+zipWith' _      _      = []
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >zip'' :: [a] -> [b] -> [(a, b)]
+zip'' = zipWith (,) 
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf13c8a6">
+<h2 id="orgf13c8a6">Chapter Exercises</h2>
+<div class="outline-text-2" id="text-orgf13c8a6">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgebb43c2">
+<h3 id="orgebb43c2"><code>Data.Char</code></h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >isUpper :: Char -> Bool
+toUpper :: Char -> Char
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >justUpper :: [Char] -> [Char]
+justUpper = filter isUpper
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >capitalize :: [Char] -> [Char]
+capitalize [] = []
+capitalize (x:xs) = (toUpper x) : xs
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >toUpperCase :: [Char] -> [Char]
+toUpperCase [] = []
+toUpperCase (x:xs) = (toUpper x) : toUpperCase xs
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >firstAsCap :: [Char] -> Char
+firstAsCap = toUpper . head
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >module Cipher where
+
+import Data.Char
+
+caesar :: Int -> [Char] -> [Char]
+caesar n s = map (shift) s
+  where
+    a = ord 'a'
+    ciphered c = (mod (ord c + n - a) 26 + a)
+    shift = chr . ciphered
+
+
+unCaesar :: Int -> [Char] -> [Char]
+unCaesar n s = caesar (negate n) s
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org06e764e">
+<h3 id="org06e764e">Standard Functions</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >myOr :: [Bool] -> Bool
+myOr [] = False
+myOr (x:xs) = x || myOr xs
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >myAny :: (a -> Bool) -> [a] -> Bool
+myAny _ [] = False
+myAny f (x:xs) = f x || myAny f xs
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >myElem :: Eq a => a -> [a] -> Bool
+myElem a = myAny (== a)
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >myReverse :: [a] -> [a]
+myReverse [] = []
+myReverse (x:xs) = myReverse xs ++ [x]
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >squish :: [[a]] -> [a]
+squish [] = []
+squish (x:xs) = x ++ mySquish xs
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >squishMap :: (a -> [b]) -> [a] -> [b]
+squishMap _ [] = []
+squishMap f (x:xs) = f x ++ squishMap f xs
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >squishAgain :: [[a]] -> [a]
+squishAgain = squishMap id
+</code></pre>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

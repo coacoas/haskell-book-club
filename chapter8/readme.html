@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 8</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Chapter 8</h1><h2 class="author">Bill Carlson</h2><p class="date">Created: 2018-03-02 Fri 08:15</p>
+</section>
+
+<section>
+<section id="slide-org0d0530b">
+<h2 id="org0d0530b">Intermission</h2>
+<div class="org-src-container">
+
+<pre><code class="haskell" >applyTimes :: (Eq a, Num a) => a -> (b -> b) -> b -> b
+applyTimes 0 f b = b
+applyTimes n f b = f (applyTimes (n-1) f b)
+
+applyTimes 5 (+1) 5
+(+1) (applyTimes (4) (+1) 5)
+(+1) ((+1) applyTimes (3) (+1) 5)
+(+1) ((+1) ((+1) applyTimes (2) (+1) 5))
+(+1) ((+1) ((+1) ((+1) applyTimes (1) (+1) 5)))
+(+1) ((+1) ((+1) ((+1) ((+1) applyTimes (0) (+1) 5))))
+(+1) ((+1) ((+1) ((+1) ((+1) 5))))
+(+1) ((+1) ((+1) ((+1) 6)))
+(+1) ((+1) ((+1) 7))
+(+1) ((+1) 8)
+(+1) 9
+10
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org373f512">
+<h2 id="org373f512">Chapter Exercises</h2>
+<div class="outline-text-2" id="text-org373f512">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orga811e40">
+<h3 id="orga811e40">Review Of Types</h3>
+</section>
+<section >
+<p>
+`1`. What is the type of <code>[[True, False], [True, True], [False, True]]</code>?
+</p>
+<p class="fragment">
+(d) <code>[[Bool]]</code>
+</p>
+</section>
+<section >
+<hr />
+<p>
+`2`. Which of the following has the same type as <code>[[True, False], [True, True], [False, True]]</code>?
+</p>
+<p class="fragment">
+(b) [[3 == 3], [6 &gt; 5], [3 &lt; 4]]
+</p>
+</section>
+<section >
+<hr />
+<p>
+`3`. For the following function
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >func    :: [a] -> [a] -> [a]
+func x y = x ++ y
+</code></pre>
+</div>
+<p>
+which of the following is true? 
+</p>
+<p class="fragment">
+(d) all of the above
+</p>
+<hr />
+<p>
+`4`. For the <code>func</code> code above, which is a valid application of <code>func</code> to both of its arguments? 
+</p>
+<p class="fragment">
+(b) <code>func "Hello" "World"</code>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org893538d">
+<h3 id="org893538d">Review currying</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >cattyConny :: String -> String -> String
+cattyConny x y = x ++ " mrow " ++ y
+-- fill in the types
+flippy :: String -> String -> String
+flippy = flip cattyConny
+
+appedCatty :: String -> String
+appedCatty = cattyConny "woops"
+
+frappe :: String -> String
+frappe = flippy "haha"
+</code></pre>
+</div>
+
+</section>
+<section >
+<hr />
+<p>
+What is the value of <code>appedCatty "woohoo"</code>? 
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >"woops mrow woohoo"
+</code></pre>
+</div>
+<hr />
+<p>
+<code>frappe "1"</code>? 
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >"1 mrow haha"
+</code></pre>
+</div>
+<hr />
+<p>
+<code>frappe (appedCatty "2")</code>? 
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >"woops mrow 2 mrow haha""
+</code></pre>
+</div>
+<hr />
+<p>
+<code>appedCatty (frappe "blue")</code>? 
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >"woops mrow blue mrow haha"
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >cattyConny (frappe "pink")
+           (cattyConny "green" (appedCatty "blue"))
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >"ping mrow haha mrow green mrow woops mrow blue"
+</code></pre>
+</div>
+<hr />
+<div class="org-src-container">
+
+<pre><code class="haskell" >cattyConny (flippy "Pugs" "are") "awesome"
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >"are mrow Pugs mrow awesome"
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org69ba17f">
+<h3 id="org69ba17f">Recursion</h3>
+</section>
+<section >
+<hr />
+<ul>
+<li>Write out the steps for reducing <code>dividedBy 15 2</code></li>
+
+</ul>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >dividedBy 15 2
+go 15 2 0
+go 13 2 1 -- (15 - 2) 2 (0 + 1)
+go 11 2 2 -- (13 - 2) 2 (1 + 1)
+go 9  2 3 -- (11 - 2) 2 (2 + 1)
+go 7  2 4 -- (9  - 2) 2 (3 + 1)
+go 5  2 5 -- (7  - 2) 2 (4 + 1)
+go 3  2 6 -- (5  - 2) 2 (5 + 1)
+go 1  2 7 -- (3  - 2) 2 (6 + 1)
+-- 1 < 2, so return (7, 1)
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<ul>
+<li>Write a function that recursively sums all numbers from 1 to n.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >sum :: (Num a, Eq a) => a -> a
+sum n = go n 0
+  where go x acc
+         | x == 0    = acc
+         | otherwise = go (x - 1) (acc + x)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >sum :: (Num a, Ord a) => a -> a
+sum n = go n 0
+  where go x acc
+         | x <= 0    = acc
+         | otherwise = go (x - 1) (acc + x)
+</code></pre>
+</div>
+</section>
+<section >
+<hr />
+<ul>
+<li>Write a function that multiplies two integral numbers using recursive summation.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >mult :: (Integral a) => a -> a -> a
+mult x y = go x 0
+  where go n acc
+         | n == 0     = acc
+         | n > 0      = go (n - 1) (acc + y)
+         | otherwise  = go (n + 1) (acc - y)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc32146a">
+<h3 id="orgc32146a">Fixing <code>dividedBy</code></h3>
+<p>
+Fix <code>dividedBy</code> to work properly with div-by-zero and negative values
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >-- Coming back to this one... 
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org6ad55ea">
+<h3 id="org6ad55ea">McCarthy 91</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >mc :: Integral a => a -> a
+mc n
+ | n > 100 = n - 10
+ | otherwise = mc . mc $ n + 11
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org748e47f">
+<h3 id="org748e47f">Numbers Into Words</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >module WordNumber where
+
+import Data.List (intersperse)
+
+digitToWord :: Int -> String
+digitToWord 0 = "zero"
+digitToWord 1 = "one"
+digitToWord 2 = "two"
+digitToWord 3 = "three"
+digitToWord 4 = "four"
+digitToWord 5 = "five"
+digitToWord 6 = "six"
+digitToWord 7 = "seven"
+digitToWord 8 = "eight"
+digitToWord 9 = "nine"
+digitToWord _ = error "how did you get this number?"
+</code></pre>
+</div>
+
+</section>
+<section >
+
+<pre  class="example">
+digits :: Int -&gt; [Int]
+digits n = go n []
+  where go x acc
+          | x &lt; 10 = x : acc
+          | otherwise = let (next, digit) = divMod x 10
+                        in go next (digit : acc)
+
+wordNumber :: Int -&gt; String
+wordNumber n =
+  let ds = digits n
+      words = map digitToWord ds
+      grouped = intersperse "-" words
+  in concat grouped
+
+</pre>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+#+OPTIONS: num:nil toc:nil
+#+REVEAL_TRANS: slide
+#+REVEAL_THEME: sky
+#+REVEAL_PLUGINS: (highlight notes)
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+REVEAL_HLEVEL: 2
+#+Title: Chapter 9
+#+Author: Bill Carlson
+#+Email: bill.carlson@cotiviti.com
+
+** EnumFromTo
+#+REVEAL: split
+#+BEGIN_SRC haskell
+eftBool :: Bool -> Bool -> [Bool]
+eftBool start stop = go stop []
+  where go current acc
+         | current < start = reverse $ eftBool stop start
+         | current == start = current : acc
+         | otherwise = go (pred current) (current : acc)
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+eftOrd :: Ordering -> Ordering -> [Ordering]
+eftOrd start stop = go stop []
+  where go current acc
+         | current < start = reverse $ eftOrd stop start
+         | current == start = current : acc
+         | otherwise = go (pred current) (current : acc)
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+eftInt :: Int -> Int -> [Int]
+eftInt start stop = go stop []
+  where go current acc
+         | current < start = reverse $ eftInt stop start
+         | current == start = current : acc
+         | otherwise = go (pred current) (current : acc)
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+eftChar :: Char -> Char -> [Char]
+eftChar start stop = go stop []
+  where go current acc
+         | current < start = reverse $ eftChar stop start
+         | current == start = current : acc
+         | otherwise = go (pred current) (current : acc)
+#+END_SRC
+
+** Thy Fearful Symmetry
+#+REVEAL: split
+Using takeWhile and dropWhile, write a function that takes a string
+and returns a list of strings, using spaces to separate the elements
+of the string into words, as in the following sample
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myWords :: [Char] -> [[Char]]
+myWords s = go s []
+  where go [] acc = reverse acc
+        go (' ':remaining) acc = go (dropWhile (== ' ') remaining) acc
+        go remaining acc =
+          let word = takeWhile (/= ' ') remaining
+              next = drop (length word) remaining
+           in go next (word : acc)
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+myWords :: Char -> [Char] -> [[Char]]
+myWords delim s = go s []
+  where go [] acc = reverse acc
+        go remaining acc =
+          let cleared = dropWhile (== delim) remaining
+              word = takeWhile (/= delim) cleared
+              next = drop (length word) cleared
+           in go next (word : acc)
+
+#+END_SRC
+
+** Comprehend Thy Lists
+#+REVEAL: split
+#+BEGIN_SRC haskell
+[x | x <- mySqr, rem x 2 == 0]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+[4, 16, 36, 64, 100]
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+[(x, y) | x <- mySqr, y <- mySqr, x < 50, y > 50]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+[(1,64),(1,81),(1,100), 
+ (4,64),(4,81),(4,100), 
+ (9,64),(9,81),(9,100), 
+ (16,64),(16,81),(16,100), 
+ (25,64),(25,81),(25,100), 
+ (36,64),(36,81),(36,100), 
+ (49,64),(49,81),(49,100)]
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+take 5 [ (x, y) | x <- mySqr, y <- mySqr, x < 50, y > 50 ]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+[(1,64), (1,81), (1,100), (4,64), (4,81)]
+#+END_SRC
+
+** Square Cube
+#+REVEAL: split
+First write an expression that will make tuples of the outputs of ~mySqr~ and ~myCube~.
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+[(x, y) | x <- mySqr, y <- myCube]
+#+END_SRC
+#+REVEAL: split
+Now alter that expression so that it only uses the x and y values that are less than 50.
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+[(x, y) | x <- mySqr, y <- myCube, x < 50, y < 50]
+#+END_SRC
+#+REVEAL: split
+Apply another function to that list comprehension to determine how
+many tuples inhabit your output list
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+length $ [(x, y) | x <- mySqr, y <- myCube, x < 50, y < 50]
+#+END_SRC
+
+** Bottom Madness
+#+REVEAL: split
+#+BEGIN_SRC haskell
+[x^y | x <- [1..5], y <- [2, undefined]]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+bottom
+#+REVEAL: split
+#+BEGIN_SRC haskell
+take 1 $ [x^y | x <- [1..5], y <- [2, undefined]]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+[1]
+#+REVEAL: split
+#+BEGIN_SRC haskell
+sum [1, undefined, 3]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+bottom
+#+REVEAL: split
+#+BEGIN_SRC haskell
+length [1, 2, undefined]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+3
+#+REVEAL: split
+#+BEGIN_SRC haskell
+length $ [1, 2, 3] ++ undefined
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+bottom
+#+REVEAL: split
+#+BEGIN_SRC haskell
+take 1 $ filter even [1, 2, 3, undefined]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+[2]
+#+REVEAL: split
+#+BEGIN_SRC haskell
+take 1 $ filter even [1, 3, undefined]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+bottom
+#+REVEAL: split
+#+BEGIN_SRC haskell
+take 1 $ filter odd [1, 3, undefined]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+[1]
+#+REVEAL: split
+#+BEGIN_SRC haskell
+take 2 $ filter odd [1, 3, undefined]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+[1,3]
+#+REVEAL: split
+#+BEGIN_SRC haskell
+take 3 $ filter odd [1, 3, undefined]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+bottom
+
+** Intermission: Is It Normal Form?
+
+1. ~[1, 2, 3, 4, 5]~ :: NF
+2. ~1 : 2 : 3 : 4 : _~ :: WHNF
+3. ~enumFromTo 1 10~ :: Neither
+4. ~length [1, 2, 3, 4, 5]~ :: WHNF
+5. ~sum (enumFromTo 1 10)~ :: NF
+6. ~['a'..'m'] ++ ['n'..'z']~ :: Neither
+7. ~(_, 'b')~ :: NF
+
+** More Bottoms
+#+BEGIN_SRC haskell
+take 1 $ map (+1) [undefined, 2, 3]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+bottom
+
+#+BEGIN_SRC haskell
+take 1 $ map (+1) [1, undefined, 3]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+[2]
+
+#+BEGIN_SRC haskell
+take 2 $ map (+1) [1, undefined, 3]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+bottom
+
+*** What does this do? 
+#+BEGIN_SRC haskell
+itIsMystery xs = map (\x -> elem x "aeiou") xs
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+It returns a list of booleans, indicating whether the corresponding letter is a vowel or not
+
+*** What is the result of this function?
+#+BEGIN_SRC haskell
+map (^2) [1..10]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+[1,4,9,16,25,36,49,64,81,100]
+
+#+BEGIN_SRC haskell
+map minimum [[1..10], [10..20], [20..30]]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+[1,10,20]
+
+#+BEGIN_SRC haskell
+map sum [[1..5], [1..5], [1..5]]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+[15, 15, 15]
+
+**** ~foldBool~
+#+BEGIN_SRC haskell
+map (\x -> bool x (-x) (x == 3)) [1..10]
+#+END_SRC
+
+** Filtering
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+threes = filter (\x -> mod x 3 == 0)
+threes [1..30]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+howManyThrees = length . threes
+#+END_SRC
+
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myFilter xs = filter notArticles wordList
+  where articles = ["a", "an", "the"]
+        notArticles x = not $ elem x articles
+        wordList = myWords ' ' xs
+#+END_SRC
+
+** Zipping
+#+REVEAL: split
+#+BEGIN_SRC haskell
+zip' :: [a] -> [b] -> [(a, b)]
+zip' (x:xs) (y:ys) = ((x,y) : zip' xs ys)
+zip' _      _      = []
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+zipWith' :: [a] -> [b] -> [(a, b)]
+zipWith' (x:xs) (y:ys) = ((x,y) : zip' xs ys)
+zipWith' _      _      = []
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+zip'' :: [a] -> [b] -> [(a, b)]
+zip'' = zipWith (,) 
+#+END_SRC
+
+* Chapter Exercises
+
+** ~Data.Char~
+
+#+BEGIN_SRC haskell
+isUpper :: Char -> Bool
+toUpper :: Char -> Char
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+justUpper :: [Char] -> [Char]
+justUpper = filter isUpper
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+capitalize :: [Char] -> [Char]
+capitalize [] = []
+capitalize (x:xs) = (toUpper x) : xs
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+toUpperCase :: [Char] -> [Char]
+toUpperCase [] = []
+toUpperCase (x:xs) = (toUpper x) : toUpperCase xs
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+firstAsCap :: [Char] -> Char
+firstAsCap = toUpper . head
+#+END_SRC
+#+REVEAL: split
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+module Cipher where
+
+import Data.Char
+
+caesar :: Int -> [Char] -> [Char]
+caesar n s = map (shift) s
+  where
+    a = ord 'a'
+    ciphered c = (mod (ord c + n - a) 26 + a)
+    shift = chr . ciphered
+        
+
+unCaesar :: Int -> [Char] -> [Char]
+unCaesar n s = caesar (negate n) s
+#+END_SRC
+
+** Standard Functions
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myOr :: [Bool] -> Bool
+myOr [] = False
+myOr (x:xs) = x || myOr xs
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myAny :: (a -> Bool) -> [a] -> Bool
+myAny _ [] = False
+myAny f (x:xs) = f x || myAny f xs
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myElem :: Eq a => a -> [a] -> Bool
+myElem a = myAny (== a)
+#+END_SRC
+#+REVEAL: split
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myReverse :: [a] -> [a]
+myReverse [] = []
+myReverse (x:xs) = myReverse xs ++ [x]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+squish :: [[a]] -> [a]
+squish [] = []
+squish (x:xs) = x ++ mySquish xs
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+squishMap :: (a -> [b]) -> [a] -> [b]
+squishMap _ [] = []
+squishMap f (x:xs) = f x ++ squishMap f xs
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+squishAgain :: [[a]] -> [a]
+squishAgain = squishMap id
+#+END_SRC
+#+REVEAL: split
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myMaximumBy :: (a -> a -> Ordering) -> [a] -> a
+myMaximumBy _ [] = error "No maximum on empty list"
+myMaximumBy o (a:as) = go as a
+  where go [] acc = acc
+        go (x: xs) acc
+          | o x acc == GT = go xs x
+          | otherwise     = go xs acc
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myMinimumBy :: (a -> a -> Ordering) -> [a] -> a
+myMinimumBy _ [] = error "No minimum on empty list"
+myMinimumBy o (a:as) = go as a
+  where go [] acc = acc
+        go (x: xs) acc
+          | o x acc == LT = go xs x
+          | otherwise     = go xs acc
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myMaximum :: (Ord a) => [a] -> a
+myMaximum (a:as) = go as a
+  where go [] acc = acc
+        go (x: xs) acc
+          | compare x acc == GT = go xs x
+          | otherwise     = go xs acc
+
+myMinimum :: (Ord a) => [a] -> a
+myMinimum (a:as) = go as a
+  where go [] acc = acc
+        go (x: xs) acc
+          | compare x acc == LT = go xs x
+          | otherwise     = go xs acc
+#+END_SRC
+

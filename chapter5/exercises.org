@@ -1,0 +1,253 @@
+#+OPTIONS: num:nil toc:nil reveal_title_slide:nil
+#+REVEAL_TRANS: slide
+#+REVEAL_THEME: sky
+#+REVEAL_PLUGINS: (highlight notes)
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+Title: Chapter 5
+#+Author: Bill Carlson
+#+Email: bill.carlson@cotiviti.com
+
+* Chapter 5
+
+** Type Matching
+- a -> c
+- b -> d
+- c -> b
+- d -> a
+- e -> e
+
+** Type Arguments
+
+1. a
+2. d
+3. d
+4. c
+5. a
+6. e
+7. d
+8. a
+9. c
+
+* Week 2
+
+** Parametricity
+
+1. It just can't be done...
+2. ~f :: a -> a -> a~
+    - ~f x _ = x~
+    - ~f _ y = y~
+3. ~f :: a -> b -> b~
+    - ~f  = _ -> y -> y~
+    - ~f  _ = id~
+
+** Apply Yourself
+
+1. ~myConcat :: [Char] -> [Char]~
+2. ~myMult :: Fractional a => a -> a~
+3. ~myTake :: Int -> [Char]~
+4. ~myCom :: Int -> Bool~
+5. ~myAlph :: Char -> Bool~
+
+** Chapter Exercises
+
+*** Multiple Choice
+
+1. c
+2. a
+3. b
+4. c
+
+*** Determine the type
+
+#+BEGIN_SRC 
+54 :: Num a => a
+(0, "doge") :: Num a => (a, [Char])
+(0, "doge") :: (Integer, [Char])
+False :: Bool
+5 :: Int
+False :: Bool
+#+END_SRC
+
+#+REVEAL: split
+2. ~w :: Num a => a~
+3. ~z :: Num a => a -> a~
+4. ~f :: Fractional a => a~
+5. ~f :: [Char]~
+
+*** Does it compile? 
+
+=1=. No. ~bigNum~ is not a Function.  You could do:
+#+BEGIN_SRC haskell
+bigNum x = (^) 5 $ x 
+wahoo = bigNum 10
+#+END_SRC
+
+#+REVEAL: split
+=2=. Compiles just fine
+
+#+REVEAL: split
+=3=. Does not compile. The problem is in line 3 - ~b~ is not a function.
+#+BEGIN_SRC haskell
+a = (+)
+c = a 10
+d = c 200
+#+END_SRC
+
+#+REVEAL: split
+=4=. Does not compile. ~b~ and ~c~ are not defined. No obvious values are available.
+
+*** Type Variable or specific type constructor? 
+
+=2=. ~f :: zed -> Zed -> Blah~
+    - zed :: unconstrained
+    - Zed :: concrete
+    - Blah :: concrete
+
+#+REVEAL: split
+=3=. ~f :: Enum b => a -> b -> C~
+    - a :: unconstrained
+    - b :: constrained
+    - C :: concrete
+
+#+REVEAL: split
+=4=. ~f :: f -> g -> C~
+    - f :: unconstrained
+    - g :: unconstrained
+    - C :: concrete
+
+*** Write a type signature
+
+1. ~functionH :: [a] -> a~
+2. ~functionC :: Ord a => a -> a -> Bool~
+3. ~functionS :: (a, b) -> b~
+
+*** Given a type, write the function
+
+=1=. ~i :: a -> a~
+#+BEGIN_SRC haskell
+i a = a -- id
+#+END_SRC
+#+REVEAL: split
+
+=2=. ~c :: a -> b -> a~
+#+BEGIN_SRC haskell
+c a b = a -- const
+#+END_SRC
+#+REVEAL: split
+=3=. ~c'' :: b -> a -> b~
+#+BEGIN_SRC haskell
+c'' b a = b -- Same as #2
+#+END_SRC
+#+REVEAL: split
+=4=. ~c' :: a -> b -> b~
+#+BEGIN_SRC haskell
+c' a b = b
+#+END_SRC
+#+REVEAL: split
+=5=. ~r :: [a] -> [a]~
+#+BEGIN_SRC haskell
+r = id
+r = reverse
+r = tail
+#+END_SRC
+#+REVEAL: split
+=6=. ~co :: (b -> c) -> (a -> b) -> a -> c~
+#+BEGIN_SRC haskell
+co = (.)
+co bc ab a = bc . ab $ a
+#+END_SRC
+#+REVEAL: split
+=7=. ~a :: (a -> c) -> a -> a~
+#+BEGIN_SRC haskell
+a _ a = a
+#+END_SRC
+#+REVEAL: split
+=8=. ~a' :: (a -> b) -> a -> b~
+#+BEGIN_SRC haskell
+a' = ($)
+a' ab a = ab $ a
+-- Arseniy also pointed out that you could use id here.  
+a' = id
+#+END_SRC
+
+*** Fix it
+
+#+BEGIN_SRC haskell
+module Sing where
+
+fstString :: [Char] -> [Char]
+fstString x = x ++ " in the rain"
+
+sndString :: [Char] -> [Char]
+sndString x = x ++ " over the rainbow"
+
+sing = if (x > y) then fstString x else sndString y
+  where x = "Singin'"
+        y = "Somewhere"
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+module Sing where
+
+fstString :: [Char] -> [Char]
+fstString x = x ++ " in the rain"
+
+sndString :: [Char] -> [Char]
+sndString x = x ++ " over the rainbow"
+
+-- sing = if (x > y) then fstString x else sndString y
+sing = if (x < y) then fstString x else sndString y
+  where x = "Singin'"
+        y = "Somewhere"
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+module Arith3Broken where
+
+main :: IO()
+main = do
+  print (1 + 2)
+  putStrLn "10"
+  print (negate (-1))
+  print ((+) 0 blah)
+    where blah = negate 1
+#+END_SRC
+
+*** Type-Kwon-Do
+=1=.
+#+BEGIN_SRC haskell
+f :: Int -> String; f = undefined
+g :: String -> Char; g = undefined
+h :: Int -> Char
+h i = g . f $ i
+#+END_SRC
+#+REVEAL: split
+=2=.
+#+BEGIN_SRC haskell
+data A; data B; data C
+q :: A -> B ; q = undefined
+w :: B -> C ; w = undefined
+e :: A -> C
+e a = w . q $ a
+#+END_SRC
+#+REVEAL: split
+=3=. 
+#+BEGIN_SRC haskell
+data X; data Y; data Z
+xz :: X -> Z ; xz = undefined
+yz :: Y -> Z ; yz = undefined
+xform :: (X, Y) -> (Z, Z) 
+xform (x, y) = (xz x, yz y)
+xform = \(x, y) -> (xz x, yz y)
+#+END_SRC
+#+REVEAL: split
+=4=.
+#+BEGIN_SRC haskell
+munge :: (x -> y) 
+      -> (y -> (w, z))
+      -> x
+      -> w
+munge xy ywz x = fst . ywz . xy $ x
+#+END_SRC

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 1</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section>
+<section id="slide-orgc4b718c">
+<h2 id="orgc4b718c">Chapter 1 Exercises</h2>
+<div class="outline-text-2" id="text-orgc4b718c">
+</div>
+</section>
+<section id="slide-org4d45137">
+<h3 id="org4d45137">Intermission: Equivalence Exercises</h3>
+<div class="outline-text-3" id="text-org4d45137">
+</div>
+</section>
+<section id="slide-org887c2ee">
+<h4 id="org887c2ee">Equivalence</h4>
+<ul>
+<li>1 -&gt; b through alpha equivalence</li>
+<li>2 -&gt; c from explicit currying</li>
+<li>3 -&gt; b through alpha equivalence</li>
+
+</ul>
+
+</section>
+<section id="slide-org7a224b7">
+<h3 id="org7a224b7">Chapter Exercises</h3>
+<div class="outline-text-3" id="text-org7a224b7">
+</div>
+</section>
+<section id="slide-org79dcd67">
+<h4 id="org79dcd67">Combinators</h4>
+<ol>
+<li>+</li>
+<li>-</li>
+<li>+</li>
+<li>+</li>
+<li>-</li>
+
+</ol>
+
+</section>
+<section id="slide-org568cc85">
+<h4 id="org568cc85">Normal Form or Diverge?</h4>
+<ol>
+<li>Normal Form</li>
+<li>Diverge</li>
+<li>Normal Form</li>
+
+</ol>
+
+</section>
+<section id="slide-orgb597fe2">
+<h4 id="orgb597fe2">Beta Reduce</h4>
+<pre  class="example">
+(\abc.cba)zz(\wv.w)
+[a = z, b = z | \c.czz](\wv.w)
+[c = \wv.w | (\wv.w)zz]
+[w = z, v = z | z]
+z
+</pre>
+
+<pre  class="example">
+(\x.\y.xyy)(\a.a)b
+[x = \a.a, y = b | (\a.a)(b)b]
+[a = b | bb]
+bb
+</pre>
+
+<pre  class="example">
+(\y.y)(\x.xx)(\z.zq)
+[y = \x.xx | \x.xx(\z.zq)]
+[x = \z.zq | (\z.zq)(\z.zq)]
+[z = \z.zq | (\z.zq)q]
+[z = q | qq]
+qq
+</pre>
+
+<pre  class="example">
+(\z.z)(\z.zz)(\z.zy)
+(\a.a)(\b.bb)(\c.cy)
+[a = \b.bb | (\b.bb)(\c.cy)]
+[b = \c.cy | (\c.cy)(\c.cy)]
+[c = \c.cy | (\c.cy)y]
+[c = y | yy ]
+yy
+</pre>
+
+<pre  class="example">
+(\x.\y.xyy)(\y.y)y
+[x = \y.y | (\y.(\y.y)yy)y ]
+[y = y | ((\y.y)y)y ]
+[y = y | yy]
+yy
+</pre>
+
+<pre  class="example">
+(\a.aa)(\b.ba)c
+[a = \b.ba | (\b.ba)(\b.ba)c ]
+[b = \b.ba | (\b.ba)ac ]
+[b = a | aac ]
+aac
+</pre>
+
+<pre  class="example">
+(\xyz.xz(yz))(\x.z)(\x.a)
+(\x.\y.\z.xz(yz))(\x.z)(\x.a)
+[x = \x.z | (\y\z1(\x.z)z1(yz1))(\x.a)]
+[y = \x.a | (\z1.z((\x.a)z1)) ]
+[x = z1 | \z1.za]
+\z1.za
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>
+(\xyz.xz(yz))(\x.z)(\x.a)
+(\s.\t.\u.su(tu))(\x.z)(\x.a)
+[s := \x.z]  (\t.\u.(\x.z)(u)(tu))(\x.a)
+[t := \x.a]  (\u.(\x.z)(u)((\x.a)u)
+[x := u]     (\u.z((\x.a)u))
+[x := u]     \u.za
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

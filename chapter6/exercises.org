@@ -1,0 +1,450 @@
+#+OPTIONS: num:nil toc:nil reveal_title_slide:nil
+#+REVEAL_TRANS: slide
+#+REVEAL_THEME: sky
+#+REVEAL_PLUGINS: (highlight notes)
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+REVEAL_HLEVEL: 2
+#+Title: Chapter 6
+#+Author: Bill Carlson
+#+Email: bill.carlson@cotiviti.com
+
+* Chapter 6
+
+** Eq Instances
+
+#+BEGIN_SRC haskell
+data TisAnInteger = TisAn Integer
+
+instance Eq TisAnInteger where 
+  (==) (TisAn a) (TisAn b) = a == b
+
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+
+data TwoIntegers = Two Integer Integer
+
+instance Eq TwoIntegers where
+  (==) (Two a b) (Two x y) = a == x && b == y
+
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+
+data StringOrInt =
+    TisAnInt   Int
+  | TisAString String
+
+instance Eq StringOrInt where
+  (==) (TisAString s) (TisAString t) = s == t
+  (==) (TisAnInt   i) (TisAnInt   j) = i == j
+  (==) _              _              = False
+
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+
+data Pair a = Pair a a
+
+instance Eq a => Eq (Pair a) where
+  (==) (Pair a b) (Pair c d)  = a == c && b == d
+
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+
+data Tuple a b = Tuple a b
+
+instance (Eq a, Eq b) => Eq (Tuple a b) where
+  (==) (Tuple a b) (Tuple c d) = a == c && b == d
+
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+
+data Which a =
+    ThisOne a
+  | ThatOne a
+
+instance Eq a => Eq (Which a) where
+  (==) (ThisOne a) (ThisOne b) = a == b
+  (==) (ThatOne a) (ThatOne b) = a == b
+  (==) _           _           = False
+
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+
+data EitherOr a b =
+    Hello a
+  | Goodbye b
+
+instance (Eq a, Eq b) => Eq (EitherOr a b) where
+  (==) (Hello x)   (Hello y)   = x == y
+  (==) (Goodbye x) (Goodbye y) = x == y
+  (==) _           _           = False
+
+#+END_SRC
+
+** Tuple Experiment
+
+#+BEGIN_SRC haskell
+Prelude> let x = 11
+Prelude> let y = 10
+Prelude> let z = 4
+Prelude> quotRem x z
+(2,3)
+Prelude> divMod (negate x) (negate z)
+(2,-3)
+Prelude> divMod x z
+(2,3)
+Prelude> quotRem (negate x) z
+(-2,-3)
+Prelude> divMod (negate x) z
+(-3,1)
+#+END_SRC
+
+** Will They Work? 
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+max (length [1, 2, 3]) (length [8, 9, 10, 11, 12])
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+max 3 5
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+5
+#+END_SRC
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+compare (3 * 4) (3 * 5)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+compare 12 15
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+LT
+#+END_SRC
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+compare "Julie" True
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Will not compile - the arguments must be of the same type
+
+#+REVEAL: split
+------
+#+BEGIN_SRC haskell
+(5 + 3) > (3 + 6)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+8 > 9
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+False
+#+END_SRC
+
+** Chapter Exercises
+
+*** Multiple Choice
+#+REVEAL: split
+------
+The ~Eq~ class 
+- includes all types in Haskell
+- is the same as the ~Ord~ class
+- *makes equality tests possible*
+- only includes numeric types
+
+#+REVEAL: split
+------
+The typeclass ~Ord~
+- allows any two values to be compared
+- *is a subclass of ~Eq~*
+- is a superclass of ~Eq~
+- has no instance for ~Bool~
+
+#+REVEAL: split
+------
+Suppose the typeclass ~Ord~ has an operator ~>~. What is the type of ~>~?
+- *~Ord a => a -> a -> Bool~*
+- ~Ord a => Int -> Bool~
+- ~Ord a => a -> Char~
+- ~Ord a => Char -> [Char]~
+
+#+REVEAL: split
+------
+In ~x = divMod 16 12~
+- the type of ~x~ is ~Integer~
+- the value of ~x~ is undecidable
+- *the type of ~x~ is a tuple*
+- ~x~ is equal to ~12/16~
+
+#+REVEAL: split
+------
+The typeclass ~Integral~ includes
+- *~Int~ and ~Integer~ numbers*
+- integral, real, and fractional numbers
+- Schrodinger's cat
+- only positive numbers
+
+*** Does it typecheck?
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+data Person = Person Bool
+
+printPerson :: Persion -> IO ()
+printPerson person = putStrLn (show person)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Will not compile - no instance of ~Show~ for ~Person~
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+data Mood = Blah
+          | Woot deriving Show
+
+settleDown x = if x == Woot
+               then Blah
+               else x
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Will not typecheck because no instance of ~Eq~ for ~Mood~
+
+#+REVEAL: split
+-----
+Getting ~settleDown~ to compile...
+#+ATTR_REVEAL: :frag t
+Add an ~Eq~ typeclass to the ~deriving~ block
+#+ATTR_REVEAL: :frag t
+1. Acceptable inputs: ~Mood~
+2. ~settledown 9~ will produce a type error
+3. ~Blah > Woot~ will produce a type error because there is no ~Ord~ instance
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+type Subject = String; type Verb = String, type Object = String
+
+data Sentence = Sentence Subject Verb Object
+  deriving (Eq, Show)
+
+s1 = Sentence "dogs" "drool"
+s2 = Sentence "Julie" "loves" "dogs"
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+It does typecheck, but you will get a warning in the REPL when ~s1~ is assigned. 
+
+*** Given a datatype declaration, what can we do? 
+#+REVEAL: split
+#+BEGIN_SRC haskell
+data Rocks = Rocks String deriving (Eq, Show)
+data Yeah = Yeah Bool deriving (Eq, Show)
+data Papu = Papu Rocks Yeah deriving (Eq, Show)
+#+END_SRC
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+phew = Papu "chases" True
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Will not typecheck - needs to be 
+#+BEGIN_SRC haskell
+phew = Papu (Rocks "chases") (Yeah True)
+#+END_SRC
+
+-----
+#+REVEAL: split
+#+BEGIN_SRC haskell
+truth = Papu (Rocks "chomskydoz")
+             (Yeah True)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Typechecks!
+
+-----
+#+REVEAL: split
+#+BEGIN_SRC haskell
+equalityForAll :: Papu -> Papu -> Bool
+equalityForAll p p' = p == p'
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Typechecks!
+
+-----
+#+REVEAL: split
+#+BEGIN_SRC haskell
+comparePapus :: Papu -> Papu -> Bool
+comparePapus p p' = p > p'
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Will not typecheck - need an ~Ord~ instance for ~Papu~
+
+*** Match the types
+#+REVEAL: split
+#+BEGIN_SRC haskell
+i :: Num a => a 
+i = 1
+-- 
+i :: a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Does not work, since i needs a ~Num~ instance
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+f :: Float
+f = 1.0
+
+f :: Num a => a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Does not work, since f needs a ~Fractional~ instance
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+f :: Float
+f = 1.0 
+
+f :: Fractional a => a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Correct
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+f :: Float
+f = 1.0
+
+f :: RealFrac a => a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+This works, since both ~Real~ and ~Fractional~ instances exist for 1.0
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+freud :: a -> a
+freud x = x
+
+freud :: Ord a => a -> a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Works, even though not using any functions from ~Ord~
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+freud' :: a -> a
+freud' x = x
+
+freud' :: Int -> Int
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Works - restricting the type
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+myX = 1 :: Int
+sigmund :: Int -> Int
+sigmund x = myX
+
+sigmund :: a -> a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Does not typecheck - has to return an Int
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+myX = 1 :: Int
+sigmund' :: Int -> Int
+sigmund' x = myX
+
+sigmund' :: Num a => a -> a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Does not typecheck - ~Num~ is still wider than ~Int~.  The concrete type has been applied.
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+jung :: Ord a => [a] -> a
+jung xs = head (sort xs)
+
+jung :: [Int] -> Int
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Typechecks - ~Int~ has an ~Ord~ instance
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+young :: [Char] -> Char
+young xs = head (sort xs)
+
+young :: Ord a => [a] -> a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Typechecks
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+mySort :: [Char] -> [Char]
+mySort = sort
+signifier :: [Char] -> Char
+signifier xs = head (mySort xs)
+
+signifier :: Ord a => [a] -> a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Does not typecheck - mySort requires a ~[Char]~, not ~[Ord a => a]~
+
+*** Type-Kwon-Do Two :: Electric Typealoo
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+chk :: Eq b => (a -> b) -> a -> b -> Bool
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+chk f a b = f(a) == b
+#+END_SRC
+
+#+REVEAL: split
+-----
+#+BEGIN_SRC haskell
+arith :: Num b
+      => (a -> b)
+      -> Integer
+      -> a
+      -> b
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+arith f' i a = f'(a) ^ i
+#+END_SRC
