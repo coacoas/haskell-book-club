@@ -10,3 +10,316 @@
 
 * Foldable
 
+** Understanding Folds
+#+BEGIN_SRC haskell
+foldr (*) 1 [1..5]
+#+END_SRC
+will return the same as: 
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldl (flip (*)) 1 [1..5]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldl (*) 1 [1..5]
+#+END_SRC
+
+#+REVEAL: split
+Write out the evaluation steps of
+#+BEGIN_SRC haskell
+foldl (flip (*)) 1 [1..3]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldl (flip (*)) (1 * 1) [2..3])
+foldl (flip (*)) (1 * 1 * 2) [3])
+foldl (flip (*)) (1 * 1 * 2 * 3) [])
+(1 * 1 * 2 * 3)
+6
+#+END_SRC
+
+#+REVEAL: split
+One difference between ~foldr~ and ~foldl~ is:
+#+ATTR_REVEAL: :frag t
+- (c) ~foldr~, but not ~foldl~, associates to the right
+
+#+REVEAL: split
+Folds are catamorphisms, which are generally used to:
+#+ATTR_REVEAL: :frag t
+- (a) reduce structure
+
+#+REVEAL: split
+The following are simple folds very similar to what you’ve already
+seen, but each has at least one error.
+#+BEGIN_SRC haskell
+foldr (++) ["woot", "WOOT", "woot"]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell 
+foldr (++) [] ["woot", "WOOT", "woot"]
+#+END_SRC
+
+#+BEGIN_SRC haskell
+foldr max [] "fear is the little death"
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+import Data.Char
+foldr max (chr 0) "fear is the little death"
+#+END_SRC
+
+#+BEGIN_SRC haskell
+foldr and True [False, True]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldr (&&) True [False, True]
+#+END_SRC
+
+#+REVEAL: split
+This one is more subtle than the previous. Can it ever
+return a different answer?
+
+#+BEGIN_SRC haskell
+foldr (||) True [False, True]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell 
+foldr (||) False (take 1 [False, True]) --  (?)
+#+END_SRC
+
+#+BEGIN_SRC haskell
+foldl ((++) . show) "" [1..5]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldl (flip ((++) . show)) "" [1..5]
+#+END_SRC
+
+#+BEGIN_SRC haskell
+foldr const 'a' [1..5]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldr const (ord 'a') [1..5]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+foldr const 0 "tacos"
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldr const (chr 0) "tacos"
+#+END_SRC
+
+#+BEGIN_SRC haskell
+foldl (flip const) 0 "burritos"
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldl (flip const) (chr 0) "burritos"
+#+END_SRC
+
+#+BEGIN_SRC haskell
+foldl (flip const) 'z' [1..5]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldl (flip const) (ord 'z') [1..5]
+#+END_SRC
+
+** Database Processing
+#+BEGIN_SRC haskell
+data DatabaseItem = DbString String
+                  | DbNumber Integer
+                  | DbDate UTCTime
+  deriving (Eq, Ord, Show)
+
+theDatabase :: [DatabaseItem]
+theDatabase =
+  [ DbDate (UTCTime
+           (fromGregorian 1911 5 1)
+           (secondsToDiffTime 34123))
+  , DbNumber 9001
+  , DbString "Hello, world!"
+  , DbDate (UTCTime
+           (fromGregorian 1921 5 1)
+           (secondsToDiffTime 34123))
+  ]
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+filterDbDate :: [DatabaseItem] -> [UTCTime]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+filterDbDate = foldr filterDate []
+  where filterDate (DbDate time) xs = time : xs
+        filterDate _ xs = xs 
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+filterDbNumber :: [DatabaseItem] -> [Integer]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+filterDbNumber = foldr filterNum []
+  where filterNum (DbNumber num) xs = num : xs
+        filterNum _ xs = xs 
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+mostRecent :: [DatabaseItem] -> UTCTime
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+mostRecent = last . sort . filterDbDate
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+sumDb :: [DatabaseItem] -> Integer
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+sumDb = foldr (+) 0 . filterDbNumber
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+avgDb :: [DatabaseItem] -> Double
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+avgDb db = let
+  filtered = filterDbNumber db
+  l = length filtered
+  s = foldr (+) 0 filtered
+  in (fromIntegral s) / (fromIntegral l)
+#+END_SRC
+
+** Scans
+
+#+REVEAL: split
+`1`. Modify your fibs function to only return the first 20 Fibonacci
+numbers.
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+fibs = take 20 $ 1 : scanl (+) 1 fibs
+#+END_SRC
+
+#+REVEAL: split
+`2`. Modify fibs to return the Fibonacci numbers that are less than
+100.
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+fibs = takeWhile (<100) $ 1 : scanl (+) 1 fibs
+#+END_SRC
+
+#+REVEAL: split
+`3`. Try to write the factorial function from Recursion as a scan.
+You’ll want scanl again, and your start value will be 1.
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+
+#+END_SRC
+
+* Chapter Exercises
+
+** Warm-up
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+tuples :: [(Char, Char, Char)]
+tuples = [(x, y, z) | x <- stops, y <- vowels, z <- stops]
+
+tuples' :: [(Char, Char, Char)]
+tuples' = [('p', y, z) | y <- vowels, z <- stops]
+
+wordTuples :: [(String, String, String)]
+wordTuples = [(x, y, z) | x <- nouns, y <- verbs, z <- nouns]
+
+tupled :: [a] -> [b] -> [(a, b, a)]
+tupled a b = [(x, y, z) | x <- a, y <- b, z <- a]
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+seekritFunc x =
+ div (sum (map length (words x)))
+     (length (words x))
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+- Takes a sentence
+- divides the sum of the lengths of the words by the number of words
+- Or... returns the average length of the words in the sentence
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+seekritFuncF x =
+ (/) (fromIntegral (sum (map length (words x))))
+     (fromIntegral (length (words x)))
+#+END_SRC
+
+*** Rewrite functions
+- ~or~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myOr = foldr (||) False
+#+END_SRC
+- ~any~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myAny f = (foldr (||) False) . (map f)
+#+END_SRC
+- ~elem~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myElem x = foldr ((||) . (==x)) False
+myElem' x = myAny (==x)
+#+END_SRC
+#+REVEAL: split
+- ~reverse~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+foldl' (flip (:)) [] [1,2,3,4]
+#+END_SRC
+- ~filter~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myReverse = foldl (flip (:)) [] [1..24]
+#+END_SRC
+- ~map~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myMap f xs = foldr (\a e -> f a : e) [] xs
+#+END_SRC
+
+- ~squish~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+mySquish :: [[a]] -> [a]
+mySquish = foldr (++) []
+#+END_SRC
+#+REVEAL: split
+- ~squishMap~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+squishMap :: [a] -> (a -> [b]) -> [b]
+squishMap as f = foldr (\a e -> (f a) ++ e) [] as
+#+END_SRC
+- ~squishAgain~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+squishAgain :: [[a]] -> [a]
+squishAgain = (flip squishMap) id
+#+END_SRC
+- ~maximumBy~
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+myMaximumBy f xs = head . sortBy f $ xs 
+-- or myMaximumBy f = head . sortBy f 
+#+END_SRC
