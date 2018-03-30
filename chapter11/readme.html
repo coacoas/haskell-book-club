@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 11</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Chapter 11</h1><h2 class="author">Bill Carlson</h2><p class="date">Created: 2018-03-30 Fri 09:32</p>
+</section>
+
+<section>
+<section id="slide-org5eccd1a">
+<h2 id="org5eccd1a">Exercises</h2>
+<div class="outline-text-2" id="text-org5eccd1a">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org2ec921d">
+<h3 id="org2ec921d">Dog Types</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Doggies a = Husky a
+               | Mastiff a
+     deriving (Eq, Show)
+
+data DogueDeBordeaux doge = DogueDeBordeaux doge
+</code></pre>
+</div>
+</section>
+<section id="slide-org0ac78d5">
+<h4 id="org0ac78d5">Dog Types</h4>
+<p>
+Is Doggies a type constructor or a data constructor?
+</p>
+<ul class="fragment">
+<li>Type constructor</li>
+
+</ul>
+
+<p>
+What is the kind of Doggies?
+</p>
+<ul class="fragment">
+<li><code>* -&gt; *</code></li>
+
+</ul>
+<p>
+What is the kind of Doggies String?
+</p>
+<ul class="fragment">
+<li><code>*</code></li>
+
+</ul>
+
+</section>
+<section id="slide-org6c5b360">
+<h4 id="org6c5b360">Dog Types</h4>
+<p>
+What is the type of Husky 10?
+</p>
+<ul class="fragment">
+<li><code>Num a =&gt; Doggies a</code></li>
+
+</ul>
+
+<p>
+What is the type of Husky (10 :: Integer)?
+</p>
+<ul class="fragment">
+<li><code>Doggies Integer</code></li>
+
+</ul>
+
+<p>
+What is the type of Mastiff "Scooby Doo"?
+</p>
+<ul class="fragment">
+<li><code>Doggies [Char]</code></li>
+
+</ul>
+
+</section>
+<section id="slide-org5133547">
+<h4 id="org5133547">Dog Types</h4>
+<p>
+Is DogueDeBordeaux a type constructor or a data constructor?
+</p>
+<ul class="fragment">
+<li>Both? One of each?</li>
+
+</ul>
+
+<p>
+What is the type of DogueDeBordeaux?
+</p>
+<ul class="fragment">
+<li><code>doge -&gt; DogueDeBordeaux doge</code></li>
+
+</ul>
+
+<p>
+What is the type of DogueDeBordeaux "doggie!"
+</p>
+<ul class="fragment">
+<li><code>DogueDeBordeaux [Char]</code></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org602d241">
+<h3 id="org602d241">Vehicles</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >isCar :: Vehicle -> Bool
+isCar (Car _ _) = True
+isCar _ = False
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >isPlane :: Vehicle -> Bool
+isPlane (Plane _) = True
+isPlane _ = False
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >areCars :: [Vehicle] -> [Bool]
+areCars = map isCar
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >getManu :: Vehicle -> Manufacturer
+getManu (Car man _) = man
+getMenu (Plane man) = man
+</code></pre>
+</div>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org47ccb33">
+<h3 id="org47ccb33">Cardinality</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data PugType = PugData
+</code></pre>
+</div>
+<p class="fragment">
+1
+</p>
+
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Airline = PapuAir | CatapultsR'Us | TakeYourChancesUnited
+</code></pre>
+</div>
+<p class="fragment">
+3
+</p>
+
+<div class="org-src-container">
+
+<pre><code class="haskell" >Int16
+</code></pre>
+</div>
+<p class="fragment">
+65536
+</p>
+
+</section>
+<section id="slide-orgb88fc9f">
+<h4 id="orgb88fc9f">Cardinality</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >Int
+Integer
+</code></pre>
+</div>
+<p class="fragment">
+18446744073709552000 / Not bounded
+</p>
+
+<p>
+What's the connection between the <code>8</code> in <code>Int8</code> and <code>256</code>?
+</p>
+<p class="fragment">
+256 == 2<sup>8</sup>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org74abda6">
+<h3 id="org74abda6">For Example</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Example = MakeExample deriving Show
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >λ> :t MakeExample
+MakeExample :: Example
+</code></pre>
+</div>
+<pre  class="fragment">
+λ&gt; :t Example
+&lt;interactive&gt;:1:1-7: error: Data constructor not in scope: Example
+</pre>
+
+</section>
+<section id="slide-org51cfc48">
+<h4 id="org51cfc48">For Example</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >λ> :i Example
+data Example = MakeExample  -- Defined at Chapter11.hs:48:1
+instance [safe] Show Example -- Defined at Chapter11.hs:48:37
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org98fcff4">
+<h4 id="org98fcff4">For Example</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >λ> data Example = MakeExample Int deriving Show
+λ> :t MakeExample
+MakeExample :: Int -> Example
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org50dfde9">
+<h3 id="org50dfde9">Logic Goats</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >Chapter11.hs:15:1-7: error:
+    Multiple declarations of ‘tooMany’
+    Declared at: Chapter11.hs:11:1
+                 Chapter11.hs:15:1
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org3445579">
+<h3 id="org3445579">Pity the Bool</h3>
+<p>
+What is the cardinality of
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data BigSmall = Big Bool | Small Bool deriving (Eq, Show)
+</code></pre>
+</div>
+<ul>
+<li>(Big Bool) + (Small Bool)</li>
+<li>2 + 2</li>
+<li>4</li>
+
+</ul>
+
+</section>
+<section id="slide-org5398901">
+<h4 id="org5398901">Pity the Bool</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >-- bring Int8 in scope
+import Data.Int
+data NumberOrBool = Numba Int8 | BoolyBool Bool deriving (Eq, Show)
+-- parentheses due to syntactic
+-- collision between (-) minus
+-- and the negate function
+let myNumba = Numba (-128)
+</code></pre>
+</div>
+<ul>
+<li>(Numba Int8) + (BoolyBool Bool)</li>
+<li>256 + 2</li>
+<li>258</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org1353fdb">
+<h3 id="org1353fdb">How Does Your Garden Grow?</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data FlowerType = Gardenia | Daisy | Rose | Lilac deriving Show
+type Gardener = String
+data Garden = Garden Gardener FlowerType deriving Show
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >data Garden = Gardener Gardenia 
+            | Gardener Daisy
+            | Gardener Rose
+            | Gardener Lilac
+            deriving Show
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org7704f88">
+<h3 id="org7704f88">Programmers</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >allOperatingSystems :: [OperatingSystem]
+allOperatingSystems =
+  [ GnuPlusLinux
+  , OpenBSDPlusNevermindJustBSDStill
+  , Mac
+  , Windows
+  ]
+
+allLanguages :: [ProgLang]
+allLanguages =
+  [Haskell, Agda, Idris, PureScript]
+
+allProgrammers :: [Programmer]
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >allProgrammers = [Programmer opsys language
+                 | opsys <- allOperatingSystems,
+                   language <- allLanguages]
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org6825fa5">
+<h3 id="org6825fa5">The Quad</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Quad = One
+          | Two
+          | Three
+          | Four
+          deriving (Eq, Show)
+</code></pre>
+</div>
+<p>
+How many different forms can this take? 
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >eQuad :: Either Quad Quad
+</code></pre>
+</div>
+<p class="fragment">
+4 + 4 = 8
+</p>
+
+</section>
+<section id="slide-org09eec5e">
+<h4 id="org09eec5e">The Quad</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >prodQuad :: (Quad, Quad)
+</code></pre>
+</div>
+<p class="fragment">
+4 * 4 = 16
+</p>
+
+</section>
+<section id="slide-orgfea1fb8">
+<h4 id="orgfea1fb8">The Quad</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >funcQuad :: Quad -> Quad
+</code></pre>
+</div>
+<p class="fragment">
+4<sup>4</sup> = 256
+</p>
+
+</section>
+<section id="slide-org6324859">
+<h4 id="org6324859">The Quad</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >prodTBool :: (Bool, Bool, Bool)
+</code></pre>
+</div>
+<p class="fragment">
+2 * 2 * 2 = 8
+</p>
+
+</section>
+<section id="slide-org05e2fa3">
+<h4 id="org05e2fa3">The Quad</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >gTwo :: Bool -> Bool -> Bool
+</code></pre>
+</div>
+<p class="fragment">
+(2<sup>2</sup>)<sup>2</sup> = 16
+2<sup>2 * 2</sup> = 16
+</p>
+
+</section>
+<section id="slide-orgb6529d3">
+<h4 id="orgb6529d3">The Quad</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >fTwo :: Bool -> Quad -> Quad -- FIVE digit number!
+</code></pre>
+</div>
+<p class="fragment">
+## 2<sup>4<sup>4</sup></sup> = 65536
+(4<sup>4</sup>)<sup>2</sup> = (4<sup>8</sup>) = 
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd28cb2e">
+<h2 id="orgd28cb2e">Chapter Exercises</h2>
+<div class="outline-text-2" id="text-orgd28cb2e">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1e285e8">
+<h3 id="org1e285e8">Multiple Choice</h3>
+<p>
+Given the following datatype:
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Weekday = Monday
+             | Tuesday
+             | Wednesday
+             | Thursday
+             | Friday
+</code></pre>
+</div>
+<p>
+we can say:
+</p>
+<p class="fragment">
+<b>Weekday is a type with five data constructors</b>
+</p>
+
+</section>
+<section id="slide-org52ac14b">
+<h4 id="org52ac14b">Multiple Choice</h4>
+<p>
+With the same datatype definition in mind, what is the type of the following function, f?
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >f Friday = "Miller Time"
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >f :: Weekday -> [Char]
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org5816cdb">
+<h4 id="org5816cdb">Multiple Choice</h4>
+<p>
+Types defined with the <code>data</code> keyword
+</p>
+<p class="fragment">
+(b) must begin with a capital letter
+</p>
+
+</section>
+<section id="slide-org6a09b67">
+<h4 id="org6a09b67">Multiple Choice</h4>
+<p>
+The function 
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >g xs = xs !! (length xs - 1)
+</code></pre>
+</div>
+<p class="fragment">
+c) delivers the final element of xs
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org6dd52c4">
+<h3 id="org6dd52c4">Ciphers</h3>
+<p>
+See <a href="./Caesar.hs">Caesar.hs</a>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc5fec42">
+<h3 id="orgc5fec42">As-Patterns</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >isSubSeqOf :: Eq a => [a] -> [a] -> Bool
+isSubSeqOf sub full = go sub full
+  where go [] _ = True
+        go _ [] = False
+        go subrem@(x:xs) (y:ys) =
+          if x == y then go xs ys
+          else go subrem ys
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org75ba5ac">
+<h4 id="org75ba5ac">As-Patterns</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >capitalizeWords :: String -> [(String, String)]
+capitalizeWords sentence = map capitalize (words sentence)
+  where capitalize "" = ("", "")
+        capitalize w@(x:xs) = (w, toUpper x : xs)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orga4fa0da">
+<h3 id="orga4fa0da">Language Exercises</h3>
+<p>
+Write a function that capitalizes a word
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >capitalizeWord :: String -> String
+capitalizeWord (x:xs) = toUpper x : xs
+capitalizeWord "" = ""
+</code></pre>
+</div>
+</section>
+<section id="slide-org922b9c1">
+<h4 id="org922b9c1">Language Exercises</h4>
+<p>
+Write a function that capitalizes sentences in a paragraph.
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org451caed">
+<h3 id="org451caed">Phone Exercise</h3>
+<p>
+<a href="./Phone.hs">Phone.hs</a>
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

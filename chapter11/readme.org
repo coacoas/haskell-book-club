@@ -1,0 +1,346 @@
+#+OPTIONS: num:nil toc:nil
+#+REVEAL_TRANS: slide
+#+REVEAL_THEME: sky
+#+REVEAL_PLUGINS: (highlight notes)
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+REVEAL_HLEVEL: 2
+#+Title: Chapter 11
+#+Author: Bill Carlson
+#+Email: bill.carlson@cotiviti.com
+
+* Exercises
+
+** Dog Types
+#+BEGIN_SRC haskell
+data Doggies a = Husky a
+               | Mastiff a
+     deriving (Eq, Show)
+
+data DogueDeBordeaux doge = DogueDeBordeaux doge
+#+END_SRC
+*** Dog Types
+Is Doggies a type constructor or a data constructor?
+#+ATTR_REVEAL: :frag t
+- Type constructor
+
+What is the kind of Doggies?
+#+ATTR_REVEAL: :frag t
+- ~* -> *~
+What is the kind of Doggies String?
+#+ATTR_REVEAL: :frag t
+- ~*~
+
+*** Dog Types
+What is the type of Husky 10?
+#+ATTR_REVEAL: :frag t
+- ~Num a => Doggies a~
+
+What is the type of Husky (10 :: Integer)?
+#+ATTR_REVEAL: :frag t
+- ~Doggies Integer~
+
+What is the type of Mastiff "Scooby Doo"?
+#+ATTR_REVEAL: :frag t
+- ~Doggies [Char]~
+
+*** Dog Types
+Is DogueDeBordeaux a type constructor or a data constructor?
+#+ATTR_REVEAL: :frag t
+- Both? One of each? 
+
+What is the type of DogueDeBordeaux?
+#+ATTR_REVEAL: :frag t
+- ~doge -> DogueDeBordeaux doge~
+
+What is the type of DogueDeBordeaux "doggie!"
+#+ATTR_REVEAL: :frag t
+- ~DogueDeBordeaux [Char]~
+
+** Vehicles
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+isCar :: Vehicle -> Bool
+isCar (Car _ _) = True
+isCar _ = False
+#+END_SRC
+
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+isPlane :: Vehicle -> Bool
+isPlane (Plane _) = True
+isPlane _ = False
+#+END_SRC
+
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+areCars :: [Vehicle] -> [Bool]
+areCars = map isCar
+#+END_SRC
+
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+getManu :: Vehicle -> Manufacturer
+getManu (Car man _) = man
+getMenu (Plane man) = man
+#+END_SRC
+
+
+** Cardinality
+#+BEGIN_SRC haskell
+data PugType = PugData
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+1
+
+#+BEGIN_SRC haskell
+data Airline = PapuAir | CatapultsR'Us | TakeYourChancesUnited
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+3
+
+#+BEGIN_SRC haskell
+Int16
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+65536
+
+*** Cardinality
+#+BEGIN_SRC haskell
+Int
+Integer
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+18446744073709552000 / Not bounded
+
+What's the connection between the ~8~ in ~Int8~ and ~256~?
+#+ATTR_REVEAL: :frag t
+256 == 2^8
+
+** For Example
+
+#+BEGIN_SRC haskell
+data Example = MakeExample deriving Show
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+λ> :t MakeExample
+MakeExample :: Example
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC 
+λ> :t Example
+<interactive>:1:1-7: error: Data constructor not in scope: Example
+#+END_SRC
+
+*** For Example
+#+BEGIN_SRC haskell
+λ> :i Example
+data Example = MakeExample  -- Defined at Chapter11.hs:48:1
+instance [safe] Show Example -- Defined at Chapter11.hs:48:37
+#+END_SRC
+
+*** For Example
+#+BEGIN_SRC haskell
+λ> data Example = MakeExample Int deriving Show
+λ> :t MakeExample
+MakeExample :: Int -> Example
+#+END_SRC
+
+** Logic Goats
+#+BEGIN_SRC haskell
+Chapter11.hs:15:1-7: error:
+    Multiple declarations of ‘tooMany’
+    Declared at: Chapter11.hs:11:1
+                 Chapter11.hs:15:1
+#+END_SRC
+
+** Pity the Bool
+What is the cardinality of
+#+BEGIN_SRC haskell
+data BigSmall = Big Bool | Small Bool deriving (Eq, Show)
+#+END_SRC
+- (Big Bool) + (Small Bool)
+- 2 + 2
+- 4
+
+*** Pity the Bool
+#+BEGIN_SRC haskell
+-- bring Int8 in scope
+import Data.Int
+data NumberOrBool = Numba Int8 | BoolyBool Bool deriving (Eq, Show)
+-- parentheses due to syntactic
+-- collision between (-) minus
+-- and the negate function
+let myNumba = Numba (-128)
+#+END_SRC
+- (Numba Int8) + (BoolyBool Bool)
+- 256 + 2
+- 258
+
+** How Does Your Garden Grow?
+#+BEGIN_SRC haskell
+data FlowerType = Gardenia | Daisy | Rose | Lilac deriving Show
+type Gardener = String
+data Garden = Garden Gardener FlowerType deriving Show
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+data Garden = Gardener Gardenia 
+            | Gardener Daisy
+            | Gardener Rose
+            | Gardener Lilac
+            deriving Show
+#+END_SRC
+
+** Programmers
+#+BEGIN_SRC haskell
+allOperatingSystems :: [OperatingSystem]
+allOperatingSystems =
+  [ GnuPlusLinux
+  , OpenBSDPlusNevermindJustBSDStill
+  , Mac
+  , Windows
+  ]
+  
+allLanguages :: [ProgLang]
+allLanguages =
+  [Haskell, Agda, Idris, PureScript]
+  
+allProgrammers :: [Programmer]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+allProgrammers = [Programmer opsys language
+                 | opsys <- allOperatingSystems,
+                   language <- allLanguages]
+#+END_SRC
+
+** The Quad
+#+BEGIN_SRC haskell
+data Quad = One
+          | Two
+          | Three
+          | Four
+          deriving (Eq, Show)
+#+END_SRC
+How many different forms can this take? 
+#+BEGIN_SRC haskell
+eQuad :: Either Quad Quad
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+4 + 4 = 8
+
+*** The Quad
+#+BEGIN_SRC haskell
+prodQuad :: (Quad, Quad)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+4 * 4 = 16
+
+*** The Quad
+#+BEGIN_SRC haskell
+funcQuad :: Quad -> Quad
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+4^{4} = 256
+
+*** The Quad
+#+BEGIN_SRC haskell
+prodTBool :: (Bool, Bool, Bool)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+2 * 2 * 2 = 8
+
+*** The Quad
+#+BEGIN_SRC haskell
+gTwo :: Bool -> Bool -> Bool
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+(2^{2})^{2} = 16
+2^{2 * 2} = 16
+
+*** The Quad
+#+BEGIN_SRC haskell
+fTwo :: Bool -> Quad -> Quad -- FIVE digit number!
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+# 2^{4^{4}} = 65536
+(4^{4})^{2} = (4^{8}) = 65536
+
+* Chapter Exercises
+** Multiple Choice
+Given the following datatype:
+#+BEGIN_SRC haskell
+data Weekday = Monday
+             | Tuesday
+             | Wednesday
+             | Thursday
+             | Friday
+#+END_SRC
+we can say:
+#+ATTR_REVEAL: :frag t
+*Weekday is a type with five data constructors*
+
+*** Multiple Choice
+With the same datatype definition in mind, what is the type of the following function, f?
+#+BEGIN_SRC haskell
+f Friday = "Miller Time"
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+f :: Weekday -> [Char]
+#+END_SRC
+
+*** Multiple Choice
+Types defined with the ~data~ keyword
+#+ATTR_REVEAL: :frag t
+(b) must begin with a capital letter
+
+*** Multiple Choice
+The function 
+#+BEGIN_SRC haskell
+g xs = xs !! (length xs - 1)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+c) delivers the final element of xs
+
+** Ciphers
+See [[./Caesar.hs][Caesar.hs]]
+
+** As-Patterns
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+isSubSeqOf :: Eq a => [a] -> [a] -> Bool
+isSubSeqOf sub full = go sub full
+  where go [] _ = True
+        go _ [] = False
+        go subrem@(x:xs) (y:ys) =
+          if x == y then go xs ys
+          else go subrem ys
+#+END_SRC
+
+*** As-Patterns
+#+BEGIN_SRC haskell 
+capitalizeWords :: String -> [(String, String)]
+capitalizeWords sentence = map capitalize (words sentence)
+  where capitalize "" = ("", "")
+        capitalize w@(x:xs) = (w, toUpper x : xs)
+#+END_SRC
+
+** Language Exercises
+Write a function that capitalizes a word
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+capitalizeWord :: String -> String
+capitalizeWord (x:xs) = toUpper x : xs
+capitalizeWord "" = ""
+#+END_SRC
+*** Language Exercises
+Write a function that capitalizes sentences in a paragraph.
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+
+#+END_SRC
+
+** Phone Exercise
+[[./Phone.hs][Phone.hs]]
