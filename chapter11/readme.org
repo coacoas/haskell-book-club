@@ -256,15 +256,13 @@ prodTBool :: (Bool, Bool, Bool)
 gTwo :: Bool -> Bool -> Bool
 #+END_SRC
 #+ATTR_REVEAL: :frag t
-(2^{2})^{2} = 16
-2^{2 * 2} = 16
+(2^{2})^{2} = 2^{2 * 2} = 16
 
 *** The Quad
 #+BEGIN_SRC haskell
 fTwo :: Bool -> Quad -> Quad -- FIVE digit number!
 #+END_SRC
 #+ATTR_REVEAL: :frag t
-# 2^{4^{4}} = 65536
 (4^{4})^{2} = (4^{8}) = 65536
 
 * Chapter Exercises

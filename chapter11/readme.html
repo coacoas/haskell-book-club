@@ -26,19 +26,19 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h1 class="title">Chapter 11</h1><h2 class="author">Bill Carlson</h2><p class="date">Created: 2018-03-30 Fri 09:32</p>
+<section id="sec-title-slide"><h1 class="title">Chapter 11</h1><h2 class="author">Bill Carlson</h2><p class="date">Created: 2018-03-30 Fri 10:08</p>
 </section>
 
 <section>
-<section id="slide-org5eccd1a">
-<h2 id="org5eccd1a">Exercises</h2>
-<div class="outline-text-2" id="text-org5eccd1a">
+<section id="slide-org3156bdd">
+<h2 id="org3156bdd">Exercises</h2>
+<div class="outline-text-2" id="text-org3156bdd">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org2ec921d">
-<h3 id="org2ec921d">Dog Types</h3>
+<section id="slide-org84aa83a">
+<h3 id="org84aa83a">Dog Types</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >data Doggies a = Husky a
@@ -49,8 +49,8 @@ data DogueDeBordeaux doge = DogueDeBordeaux doge
 </code></pre>
 </div>
 </section>
-<section id="slide-org0ac78d5">
-<h4 id="org0ac78d5">Dog Types</h4>
+<section id="slide-orgbb5971b">
+<h4 id="orgbb5971b">Dog Types</h4>
 <p>
 Is Doggies a type constructor or a data constructor?
 </p>
@@ -75,8 +75,8 @@ What is the kind of Doggies String?
 </ul>
 
 </section>
-<section id="slide-org6c5b360">
-<h4 id="org6c5b360">Dog Types</h4>
+<section id="slide-orgf808da0">
+<h4 id="orgf808da0">Dog Types</h4>
 <p>
 What is the type of Husky 10?
 </p>
@@ -102,8 +102,8 @@ What is the type of Mastiff "Scooby Doo"?
 </ul>
 
 </section>
-<section id="slide-org5133547">
-<h4 id="org5133547">Dog Types</h4>
+<section id="slide-org87207d6">
+<h4 id="org87207d6">Dog Types</h4>
 <p>
 Is DogueDeBordeaux a type constructor or a data constructor?
 </p>
@@ -131,8 +131,8 @@ What is the type of DogueDeBordeaux "doggie!"
 </section>
 </section>
 <section>
-<section id="slide-org602d241">
-<h3 id="org602d241">Vehicles</h3>
+<section id="slide-org1ae9ff2">
+<h3 id="org1ae9ff2">Vehicles</h3>
 <div class="org-src-container">
 
 <pre class="fragment"><code class="haskell" >isCar :: Vehicle -> Bool
@@ -168,8 +168,8 @@ getMenu (Plane man) = man
 </section>
 </section>
 <section>
-<section id="slide-org47ccb33">
-<h3 id="org47ccb33">Cardinality</h3>
+<section id="slide-org3b8873f">
+<h3 id="org3b8873f">Cardinality</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >data PugType = PugData
@@ -198,8 +198,8 @@ getMenu (Plane man) = man
 </p>
 
 </section>
-<section id="slide-orgb88fc9f">
-<h4 id="orgb88fc9f">Cardinality</h4>
+<section id="slide-org52f0653">
+<h4 id="org52f0653">Cardinality</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >Int
@@ -220,8 +220,8 @@ What's the connection between the <code>8</code> in <code>Int8</code> and <code>
 </section>
 </section>
 <section>
-<section id="slide-org74abda6">
-<h3 id="org74abda6">For Example</h3>
+<section id="slide-org17d9329">
+<h3 id="org17d9329">For Example</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >data Example = MakeExample deriving Show
@@ -239,8 +239,8 @@ MakeExample :: Example
 </pre>
 
 </section>
-<section id="slide-org51cfc48">
-<h4 id="org51cfc48">For Example</h4>
+<section id="slide-org48e0aab">
+<h4 id="org48e0aab">For Example</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >λ> :i Example
@@ -250,8 +250,8 @@ instance [safe] Show Example -- Defined at Chapter11.hs:48:37
 </div>
 
 </section>
-<section id="slide-org98fcff4">
-<h4 id="org98fcff4">For Example</h4>
+<section id="slide-orgd2e5177">
+<h4 id="orgd2e5177">For Example</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >λ> data Example = MakeExample Int deriving Show
@@ -263,8 +263,8 @@ MakeExample :: Int -> Example
 </section>
 </section>
 <section>
-<section id="slide-org50dfde9">
-<h3 id="org50dfde9">Logic Goats</h3>
+<section id="slide-orgb9ed98e">
+<h3 id="orgb9ed98e">Logic Goats</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >Chapter11.hs:15:1-7: error:
@@ -277,8 +277,8 @@ MakeExample :: Int -> Example
 </section>
 </section>
 <section>
-<section id="slide-org3445579">
-<h3 id="org3445579">Pity the Bool</h3>
+<section id="slide-org99882cb">
+<h3 id="org99882cb">Pity the Bool</h3>
 <p>
 What is the cardinality of
 </p>
@@ -295,8 +295,8 @@ What is the cardinality of
 </ul>
 
 </section>
-<section id="slide-org5398901">
-<h4 id="org5398901">Pity the Bool</h4>
+<section id="slide-orga665836">
+<h4 id="orga665836">Pity the Bool</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >-- bring Int8 in scope
@@ -318,8 +318,8 @@ let myNumba = Numba (-128)
 </section>
 </section>
 <section>
-<section id="slide-org1353fdb">
-<h3 id="org1353fdb">How Does Your Garden Grow?</h3>
+<section id="slide-org8c42be2">
+<h3 id="org8c42be2">How Does Your Garden Grow?</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >data FlowerType = Gardenia | Daisy | Rose | Lilac deriving Show
@@ -340,8 +340,8 @@ data Garden = Garden Gardener FlowerType deriving Show
 </section>
 </section>
 <section>
-<section id="slide-org7704f88">
-<h3 id="org7704f88">Programmers</h3>
+<section id="slide-org9688067">
+<h3 id="org9688067">Programmers</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >allOperatingSystems :: [OperatingSystem]
@@ -370,8 +370,8 @@ allProgrammers :: [Programmer]
 </section>
 </section>
 <section>
-<section id="slide-org6825fa5">
-<h3 id="org6825fa5">The Quad</h3>
+<section id="slide-org61fd0d1">
+<h3 id="org61fd0d1">The Quad</h3>
 <div class="org-src-container">
 
 <pre><code class="haskell" >data Quad = One
@@ -394,8 +394,8 @@ How many different forms can this take?
 </p>
 
 </section>
-<section id="slide-org09eec5e">
-<h4 id="org09eec5e">The Quad</h4>
+<section id="slide-org514fd26">
+<h4 id="org514fd26">The Quad</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >prodQuad :: (Quad, Quad)
@@ -406,8 +406,8 @@ How many different forms can this take?
 </p>
 
 </section>
-<section id="slide-orgfea1fb8">
-<h4 id="orgfea1fb8">The Quad</h4>
+<section id="slide-org2ede6aa">
+<h4 id="org2ede6aa">The Quad</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >funcQuad :: Quad -> Quad
@@ -418,8 +418,8 @@ How many different forms can this take?
 </p>
 
 </section>
-<section id="slide-org6324859">
-<h4 id="org6324859">The Quad</h4>
+<section id="slide-org81c81be">
+<h4 id="org81c81be">The Quad</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >prodTBool :: (Bool, Bool, Bool)
@@ -430,43 +430,41 @@ How many different forms can this take?
 </p>
 
 </section>
-<section id="slide-org05e2fa3">
-<h4 id="org05e2fa3">The Quad</h4>
+<section id="slide-orgf34e18a">
+<h4 id="orgf34e18a">The Quad</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >gTwo :: Bool -> Bool -> Bool
 </code></pre>
 </div>
 <p class="fragment">
-(2<sup>2</sup>)<sup>2</sup> = 16
-2<sup>2 * 2</sup> = 16
+(2<sup>2</sup>)<sup>2</sup> = 2<sup>2 * 2</sup> = 16
 </p>
 
 </section>
-<section id="slide-orgb6529d3">
-<h4 id="orgb6529d3">The Quad</h4>
+<section id="slide-orgfd87b3d">
+<h4 id="orgfd87b3d">The Quad</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >fTwo :: Bool -> Quad -> Quad -- FIVE digit number!
 </code></pre>
 </div>
 <p class="fragment">
-## 2<sup>4<sup>4</sup></sup> = 65536
-(4<sup>4</sup>)<sup>2</sup> = (4<sup>8</sup>) = 
+(4<sup>4</sup>)<sup>2</sup> = (4<sup>8</sup>) = 65536
 </p>
 
 </section>
 </section>
 <section>
-<section id="slide-orgd28cb2e">
-<h2 id="orgd28cb2e">Chapter Exercises</h2>
-<div class="outline-text-2" id="text-orgd28cb2e">
+<section id="slide-orgc993b20">
+<h2 id="orgc993b20">Chapter Exercises</h2>
+<div class="outline-text-2" id="text-orgc993b20">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org1e285e8">
-<h3 id="org1e285e8">Multiple Choice</h3>
+<section id="slide-org5185307">
+<h3 id="org5185307">Multiple Choice</h3>
 <p>
 Given the following datatype:
 </p>
@@ -487,8 +485,8 @@ we can say:
 </p>
 
 </section>
-<section id="slide-org52ac14b">
-<h4 id="org52ac14b">Multiple Choice</h4>
+<section id="slide-orgca42f70">
+<h4 id="orgca42f70">Multiple Choice</h4>
 <p>
 With the same datatype definition in mind, what is the type of the following function, f?
 </p>
@@ -504,8 +502,8 @@ With the same datatype definition in mind, what is the type of the following fun
 </div>
 
 </section>
-<section id="slide-org5816cdb">
-<h4 id="org5816cdb">Multiple Choice</h4>
+<section id="slide-orgf169ab4">
+<h4 id="orgf169ab4">Multiple Choice</h4>
 <p>
 Types defined with the <code>data</code> keyword
 </p>
@@ -514,8 +512,8 @@ Types defined with the <code>data</code> keyword
 </p>
 
 </section>
-<section id="slide-org6a09b67">
-<h4 id="org6a09b67">Multiple Choice</h4>
+<section id="slide-orgbc745ee">
+<h4 id="orgbc745ee">Multiple Choice</h4>
 <p>
 The function 
 </p>
@@ -531,8 +529,8 @@ c) delivers the final element of xs
 </section>
 </section>
 <section>
-<section id="slide-org6dd52c4">
-<h3 id="org6dd52c4">Ciphers</h3>
+<section id="slide-orgdbbef1e">
+<h3 id="orgdbbef1e">Ciphers</h3>
 <p>
 See <a href="./Caesar.hs">Caesar.hs</a>
 </p>
@@ -540,8 +538,8 @@ See <a href="./Caesar.hs">Caesar.hs</a>
 </section>
 </section>
 <section>
-<section id="slide-orgc5fec42">
-<h3 id="orgc5fec42">As-Patterns</h3>
+<section id="slide-org1072158">
+<h3 id="org1072158">As-Patterns</h3>
 <div class="org-src-container">
 
 <pre class="fragment"><code class="haskell" >isSubSeqOf :: Eq a => [a] -> [a] -> Bool
@@ -555,8 +553,8 @@ isSubSeqOf sub full = go sub full
 </div>
 
 </section>
-<section id="slide-org75ba5ac">
-<h4 id="org75ba5ac">As-Patterns</h4>
+<section id="slide-org2469a56">
+<h4 id="org2469a56">As-Patterns</h4>
 <div class="org-src-container">
 
 <pre><code class="haskell" >capitalizeWords :: String -> [(String, String)]
@@ -569,8 +567,8 @@ capitalizeWords sentence = map capitalize (words sentence)
 </section>
 </section>
 <section>
-<section id="slide-orga4fa0da">
-<h3 id="orga4fa0da">Language Exercises</h3>
+<section id="slide-org979efa2">
+<h3 id="org979efa2">Language Exercises</h3>
 <p>
 Write a function that capitalizes a word
 </p>
@@ -582,8 +580,8 @@ capitalizeWord "" = ""
 </code></pre>
 </div>
 </section>
-<section id="slide-org922b9c1">
-<h4 id="org922b9c1">Language Exercises</h4>
+<section id="slide-orgdb4e6a6">
+<h4 id="orgdb4e6a6">Language Exercises</h4>
 <p>
 Write a function that capitalizes sentences in a paragraph.
 </p>
@@ -596,8 +594,8 @@ Write a function that capitalizes sentences in a paragraph.
 </section>
 </section>
 <section>
-<section id="slide-org451caed">
-<h3 id="org451caed">Phone Exercise</h3>
+<section id="slide-orgec1fcf0">
+<h3 id="orgec1fcf0">Phone Exercise</h3>
 <p>
 <a href="./Phone.hs">Phone.hs</a>
 </p>
