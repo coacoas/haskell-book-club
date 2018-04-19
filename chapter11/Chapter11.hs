@@ -146,59 +146,11 @@ capitalizeWord :: String -> String
 capitalizeWord (x:xs) = toUpper x : xs
 capitalizeWord "" = ""
 
-split :: Char -> [Char] -> [[Char]]
-split delim s = go s []
-  where go [] acc = reverse acc
-        go remaining acc =
-          let cleared = dropWhile (== delim) remaining
-              word = takeWhile (/= delim) cleared
-              next = drop (length word) cleared
-           in go next (word : acc)
-
-sentences :: String -> [String]
-sentences = split '.'
-
-trim :: String -> String
-trim = dropWhile (==' ')
-
 capitalizeParagraph :: String -> String
-capitalizeParagraph paragraph = let
-  s = sentences paragraph
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+capitalizeParagraph p = capital p
+  where capital (' ':rest) = ' ':(capital rest)
+        capital (x:rest)   = (toUpper x) : (standard rest)
+        capital xs         = xs
+        standard ('.':rest) = '.':(capital rest)
+        standard (x:rest)   = x : (standard rest)
+        standard xs         = xs

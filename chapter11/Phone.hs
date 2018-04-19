@@ -2,6 +2,7 @@ module Phone where
 
 import Data.Char
 import Data.List
+import Data.Maybe
 
 data DaPhone = DaPhone { keys :: [String] } deriving Show
 
@@ -46,13 +47,13 @@ reverseTaps :: DaPhone
 reverseTaps phone c
   | isUpper c = [('*', 1)] ++ reverseTaps phone (toLower c)
   | otherwise = let
-      key = findIndex (contains c) (keys phone)
+      key = findIndex (elem c) (keys phone)
       keyDigit i
         | i < 10 = chr $ ord '0' + i
         | i == 10 = '*'
         | i == 11 = '#'
-      presses = elemIndex c (keys phone !! key)
-      in [(key, presses)]
+      presses = elemIndex c (keys phone !! (fromJust key))
+      in [(keyDigit (fromJust key), fromJust presses)]
 -- assuming the default phone definition
 -- 'a' -> [('2', 1)]
 -- 'A' -> [('*', 1), ('2', 1)]

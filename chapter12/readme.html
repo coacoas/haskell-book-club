@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 12</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Chapter 12</h1><h2 class="author">Bill Carlson</h2><p class="date">Created: 2018-04-13 Fri 09:10</p>
+</section>
+
+<section>
+<section id="slide-orge72969d">
+<h2 id="orge72969d">Chapter 12</h2>
+<div class="outline-text-2" id="text-orge72969d">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgaa4cd61">
+<h3 id="orgaa4cd61">Determine the Kinds</h3>
+<ol>
+<li>Given</li>
+
+</ol>
+<div class="org-src-container">
+
+<pre><code class="haskell" >id :: a -> a
+</code></pre>
+</div>
+<p>
+What is the kind of a?
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >a :: *
+</code></pre>
+</div>
+
+<ol>
+<li>Given</li>
+
+</ol>
+<div class="org-src-container">
+
+<pre><code class="haskell" >r :: a -> f a
+</code></pre>
+</div>
+<p>
+What are the kinds of a and f?
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >a :: *
+f :: * -> *
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org1e78c7c">
+<h3 id="org1e78c7c">String Processing</h3>
+<div class="outline-text-3" id="text-org1e78c7c">
+</div>
+</section>
+<section id="slide-org91907b2">
+<h4 id="org91907b2">String Processing</h4>
+<p>
+Write a recursive function named replaceThe which takes a text/string,
+breaks it into words and replaces each instance of “the” with “a”.
+</p>
+
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >notThe :: String -> Maybe String
+notThe s | s == "the" = Nothing
+         | otherwise  = Just s
+
+-- >>> replaceThe "the cow loves us"
+-- "a cow loves us"
+replaceThe :: String -> String
+replaceThe "" = ""
+replaceThe (' ':xs) = " " <> replaceThe xs
+replaceThe string = let
+  next = takeWhile (/= ' ') string
+  rest = drop (length next) $ string
+  word = fromMaybe "a" (notThe next)
+  in word <> replaceThe rest
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org38d2dce">
+<h4 id="org38d2dce">String Processing (another way)</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >-- >>> replaceThe "the cow loves us"
+-- "a cow loves us"
+replaceThe' :: String -> String
+replaceThe' sentence = let
+  ws = words sentence
+  transform w | w == "the" = "a"
+              | otherwise  = w
+  modifieds = map transform ws
+  in unwords modifieds
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org16083bd">
+<h4 id="org16083bd">String Processing</h4>
+<p>
+Write a recursive function that takes a text/string, breaks it into
+words, and counts the number of instances of ”the” followed by
+a vowel-initial word.
+</p>
+
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >countTheBeforeVowel :: String -> Integer
+countTheBeforeVowel string = go 0 string
+  where go :: Integer -> String -> Integer
+        go count "" = 0
+        go count (' ':xs) = go count xs
+        go count sentence = let
+          next = takeWhile (/= ' ') sentence
+          vowel = elem (head next) ("aeiouAEIOU" :: [Char])
+          in if (vowel) then count
+             else let rest = drop (length next) sentence
+                      count' = count + (maybe 1 (const 0) $ notThe next)
+                      in go count' rest
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org21de154">
+<h4 id="org21de154">String Processing</h4>
+<p>
+Return the number of letters that are vowels in a word
+</p>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >vowels :: [Char]
+vowels = "aeiou"
+
+isVowel :: Char -> Bool
+isVowel c = elem (toLower c) vowels
+
+countVowels :: String -> Integer
+countVowels s = toInteger . length . (filter isVowel) $ s
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org03a64e7">
+<h3 id="org03a64e7">Validate the Word</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >mkWord :: String -> Maybe Word'
+mkWord s = let vowelCount = countVowels s
+               consonantCount = (toInteger . length $ s) - vowelCount
+               in if (vowelCount > consonantCount) then Nothing else Just (Word' s)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org9809e24">
+<h3 id="org9809e24">It's Only Natural</h3>
+<pre  class="example">
+natToInteger :: Nat -&gt; Integer
+natToInteger n = go 0 n
+  where go :: Integer -&gt; Nat -&gt; Integer
+        go acc Zero = acc
+        go acc (Succ nat) = go (acc + 1) nat
+</pre>
+
+</section>
+<section id="slide-orgd0d0581">
+<h4 id="orgd0d0581">It's Only Natural</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >integerToNat :: Integer -> Maybe Nat
+integerToNat i
+  | i < 0     = Nothing
+  | i == 0    = Just Zero
+  | otherwise = Just . Succ . fromJust . integerToNat $ i - 1
+  -- or fmap Succ (integerToNat (i - 1))
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org6d46a03">
+<h3 id="org6d46a03">Small Library for Maybe</h3>
+<p>
+See <a href="./Mayybe.hs">Mayybe.hs</a>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org1602b6e">
+<h3 id="org1602b6e">Small Library for Either</h3>
+<p>
+See <a href="./Either.hs">Either.hs</a>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org92fad19">
+<h3 id="org92fad19">Write Your Own <code>iterate</code> and <code>unfoldr</code></h3>
+<p>
+See <a href="./Unfold.hs">Unfold.hs</a>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org9ff0757">
+<h3 id="org9ff0757">Finally something other than a list!</h3>
+<p>
+See <a href="./BinaryTree.hs">BinaryTree.hs</a>
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
