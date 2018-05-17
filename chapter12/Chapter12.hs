@@ -63,7 +63,7 @@ isVowel c = elem (toLower c) vowels
 -- >>> countVowels "Mikolajczak"
 -- 4
 countVowels :: String -> Integer
-countVowels s = toInteger . length . (filter isVowel) $ s
+countVowels = toInteger . length . (filter isVowel)
 
 newtype Word' =
   Word' String
@@ -72,4 +72,7 @@ newtype Word' =
 mkWord :: String -> Maybe Word'
 mkWord s = let vowelCount = countVowels s
                consonantCount = (toInteger . length $ s) - vowelCount
-               in if (vowelCount > consonantCount) then Nothing else Just (Word' s)
+           in
+             if (vowelCount > consonantCount)
+             then Nothing
+             else Just (Word' s)

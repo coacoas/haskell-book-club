@@ -13,7 +13,8 @@ unfold f z = go $ f z
          
 
 treeBuild :: Integer -> BinaryTree Integer
-treeBuild = unfold go
+treeBuild n = unfold go 0
   where go :: Integer -> Maybe (Integer, Integer, Integer)
-        go 0 = Nothing
-        go n = Just ((n - 1), n, (n - 1))
+        go x
+         | x == n = Nothing
+         | otherwise = Just ((x + 1), x, (x + 1))
