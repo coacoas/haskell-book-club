@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 17</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Chapter 17</h1><h2 class="author">Bill Carlson</h2><p class="date">Created: 2018-06-08 Fri 09:57</p>
+</section>
+
+<section>
+<section id="slide-orgae4273c">
+<h2 id="orgae4273c">Exercises</h2>
+<div class="outline-text-2" id="text-orgae4273c">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3232461">
+<h3 id="org3232461">Lookups</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >added :: Maybe Integer
+added = pure (+3) <*> (lookup 3 $ zip [1, 2, 3] [4, 5, 6])
+added' = (+3) <$> (lookup 3 $ zip [1, 2, 3] [4, 5, 6])
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >y :: Maybe Integer
+y = lookup 3 $ zip [1, 2, 3] [4, 5, 6]
+
+z :: Maybe Integer
+z = lookup 2 $ zip [1, 2, 3] [4, 5, 6]
+
+tupled :: Maybe (Integer, Integer)
+tupled = liftA2 (,) y z
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >x :: Maybe Int
+x = elemIndex 3 [1, 2, 3, 4, 5]
+
+y :: Maybe Int
+y = elemIndex 4 [1, 2, 3, 4, 5]
+
+max' :: Int -> Int -> Int
+max' = max
+
+maxed :: Maybe Int
+maxed = liftA2 max' x y -- or max' <$> x <*> y
+</code></pre>
+</div>
+
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >xs = [1, 2, 3]
+ys = [4, 5, 6]
+
+x :: Maybe Integer
+x = lookup 3 $ zip xs ys
+
+y :: Maybe Integer
+y = lookup 2 $ zip xs ys
+
+summed :: Maybe Integer
+summed = pure sum <*> ((,) <$> x <*> y)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgfdf5413">
+<h3 id="orgfdf5413">Identity Instance</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >newtype Identity a = Identity a
+                   deriving (Eq, Ord, Show)
+
+instance Functor Identity where
+  fmap f (Identity a) = Identity (f a)
+
+instance Applicative Identity where
+  pure = Identity
+  (<*>) (Identity f) (Identity a) = Identity (f a)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org3d9ce0b">
+<h3 id="org3d9ce0b">Constant Instance</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >newtype Constant a b =
+  Constant { getConstant :: a }
+  deriving (Eq, Ord, Show)
+
+instance Functor (Constant a) where
+  fmap f (Constant a) = Constant a
+
+instance Monoid a => Applicative (Constant a) where
+  pure _ = Constant mempty
+  (<*>) (Constant x) (Constant y) = Constant (mappend x y)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb565dc9">
+<h3 id="orgb565dc9">Fixer Upper</h3>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >const <$> Just "Hello" <*> pure "World"
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >(,,,) <$> Just 90 <*> Just 10 <*> Just "Tierness" <*> pure [1, 2, 3]
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org84b5478">
+<h3 id="org84b5478">Chapter Exercises</h3>
+<div class="outline-text-3" id="text-org84b5478">
+</div>
+</section>
+<section id="slide-org85e5053">
+<h4 id="org85e5053">Signatures</h4>
+<div class="outline-text-4" id="text-org85e5053">
+</div>
+<ul class="org-ul">
+<li><a id="orge169e77"></a>[]<br />
+<div class="org-src-container">
+
+<pre><code class="haskell" >pure  :: a -> [a]
+(<*>) :: [(a -> b)] -> [a] -> [b]
+</code></pre>
+</div>
+</li>
+
+<li><a id="orgc403e47"></a>IO<br />
+<div class="org-src-container">
+
+<pre><code class="haskell" >pure  :: a -> IO a
+(<*>) :: IO (a -> b) -> IO a -> IO b
+</code></pre>
+</div>
+</li>
+
+<li><a id="org12a989f"></a>(,) a<br />
+<div class="org-src-container">
+
+<pre><code class="haskell" >instance Monoid a => Applicative (,) a where
+pure  :: b -> (a, b)
+(<*>) :: (a, b -> d)-> (a, b) -> (a, d)
+</code></pre>
+</div>
+</li>
+
+<li><a id="orga03ed6f"></a>(-&gt;) e<br />
+<div class="org-src-container">
+
+<pre><code class="haskell" >instance Applicative (->) e where
+pure  :: a -> (->) a
+(<*>) :: (->) e (a -> b) -> (->) a -> (->) b
+</code></pre>
+</div>
+</li>
+</ul>
+
+</section>
+<section id="slide-orgaf8a2b5">
+<h4 id="orgaf8a2b5">Instances</h4>
+<div class="outline-text-4" id="text-orgaf8a2b5">
+</div>
+<ul class="org-ul">
+<li><a id="orgcfa4d06"></a><code>data Pair a = Pair a a deriving Show</code><br /></li>
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

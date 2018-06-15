@@ -12,7 +12,7 @@
 
 ** Be Kind
 
-1. What is the kind of ~a~?
+What is the kind of ~a~?
 #+BEGIN_SRC haskell
 a -> a
 #+END_SRC
@@ -20,17 +20,16 @@ a -> a
 #+BEGIN_SRC haskell
 a :: *
 #+END_SRC
-
-2. What are the kinds of 𝑏 and 𝑇 ? (The 𝑇 is capitalized on purpose!)
+What are the kinds of 𝑏 and 𝑇 ? (The 𝑇 is capitalized on purpose!)
 #+BEGIN_SRC haskell
 a -> b a -> T (b a)
 #+END_SRC
 #+ATTR_REVEAL: :frag t
-#+BEGIN_SRC 
+#+BEGIN_SRC haskell
 b :: * -> *
-T :: * -> * -> *
+T :: * -> *
 #+END_SRC
-3. What’s the kind of 𝑐?
+What’s the kind of 𝑐?
 #+BEGIN_SRC haskell
 c a b -> c b a
 #+END_SRC
@@ -39,3 +38,174 @@ c a b -> c b a
 c :: * -> * -> *
 #+END_SRC
 
+** Heavy Lifting
+#+BEGIN_SRC haskell
+a = (+1) $ read "[1]" :: [Int]
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+a = (+1) <$> read "[1]" :: [Int]
+#+END_SRC
+#+BEGIN_SRC haskell
+b = (++ "lol") (Just ["Hi,", "Hello"])
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+b = (fmap . fmap) (++ "lol") (Just ["Hi,", "Hello"])
+#+END_SRC
+#+BEGIN_SRC haskell
+c = (*2) (\x -> x - 2)
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+c = fmap (*2) (\x -> x - 2)
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+d = ((return '1' ++) . show) (\x -> [x, 1..3])
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+d = ((return '1' ++) . show) <$> (\x -> [x, 1..3])
+#+END_SRC
+#+BEGIN_SRC haskell
+e :: IO Integer
+e = let ioi = readIO "1" :: IO Integer
+        changed = read ("123"++) show ioi
+    in (*3) changed
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+e :: IO Integer
+e = let ioi = readIO "1" :: IO Integer
+        changed = read <$> ("123"++) <$> show <$> ioi
+    in (*3) <$> changed
+#+END_SRC
+
+** Instances of Func
+#+BEGIN_SRC haskell
+newtype Identity a = Identity a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor Identity where
+  fmap f (Identity a) = Identity (f a)
+
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+data Pair a = Pair a a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor Pair where
+  fmap f (Pair x y) = Pair (f x) (f y)
+  
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+data Two a b = Two a b
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor (Two a) where
+  fmap f (Two a b) = Two a (f b)
+
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+data Three a b c = Three a b c
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor (Three a b) where
+  fmap f (Three a b c) = Three a b (f c)
+
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+data Three' a b = Three' a b b
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor (Three' a) where
+  fmap f (Three' a b c) = Three' a (f b) (f c)
+
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+data Four a b c d = Four a b c d
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor (Four a b c) where
+  fmap f (Four a b c d) = Four a b c (f d)
+  
+#+END_SRC
+#+REVEAL: split
+#+BEGIN_SRC haskell
+data Four' a b = Four' a a a b
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor (Four' a) where
+  fmap f (Four' a b c d) = Four' a b c (f d)
+
+#+END_SRC
+#+REVEAL: split
+Can you implement one for this type? Why? Why not?
+#+BEGIN_SRC haskell
+data Trivial = Trivial
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+NOPE!  Wrong kind
+
+** Possibly
+#+BEGIN_SRC haskell
+data Possibly a = LolNope
+                | Yeppers a
+  deriving (Eq, Show)
+
+instance Functor Possibly where
+  fmap _ LolNope = LolNope
+  fmap f (Yeppers a) = Yeppers (f a)
+#+END_SRC
+
+** Chapter exercises
+*** Valid Functor?
+#+BEGIN_SRC haskell
+data Bool = False | True
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+Nope. Wrong kind.
+#+BEGIN_SRC haskell
+data BoolAndSomethingElse a = False' a | True' a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor BoolAndSomethingElse where
+  fmap f (False' a) = False' (f a)
+  fmap f (True a)   = True' (f a)
+#+END_SRC
+#+BEGIN_SRC haskell
+data BoolAndMaybeSomethingElse a = Falsish | Truish a
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+instance Functor BoolAndMaybeSomethingElse where
+  fmap _ Falsish    = Falsish
+  fmap f (Truish a) = Truish (f a)
+#+END_SRC
+#+BEGIN_SRC haskell
+newtype Mu f = InF { outF :: f (Mu f) }
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+I don't think so... ~Mu~ is of kind ~(* -> *) -> *~, and I'm not sure how to fix that.
+#+BEGIN_SRC haskell
+import GHC.Arr
+data D = D (Array Word Word) Int Int
+#+END_SRC
+#+ATTR_REVEAL: :frag t
+~D~ is of kind ~*~
+*** Rearrange the Arguments
+*** Write The Functor

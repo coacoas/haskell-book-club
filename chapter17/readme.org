@@ -1,0 +1,140 @@
+#+OPTIONS: num:nil toc:nil
+#+REVEAL_TRANS: slide
+#+REVEAL_THEME: sky
+#+REVEAL_PLUGINS: (highlight notes)
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+REVEAL_HLEVEL: 2
+#+Title: Chapter 17
+#+Author: Bill Carlson
+#+Email: bill.carlson@cotiviti.com
+
+* Exercises
+
+** Lookups
+
+#+BEGIN_SRC haskell
+added :: Maybe Integer
+added = pure (+3) <*> (lookup 3 $ zip [1, 2, 3] [4, 5, 6])
+added' = (+3) <$> (lookup 3 $ zip [1, 2, 3] [4, 5, 6])
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+y :: Maybe Integer
+y = lookup 3 $ zip [1, 2, 3] [4, 5, 6]
+
+z :: Maybe Integer
+z = lookup 2 $ zip [1, 2, 3] [4, 5, 6]
+
+tupled :: Maybe (Integer, Integer)
+tupled = liftA2 (,) y z
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+x :: Maybe Int
+x = elemIndex 3 [1, 2, 3, 4, 5]
+
+y :: Maybe Int
+y = elemIndex 4 [1, 2, 3, 4, 5]
+
+max' :: Int -> Int -> Int
+max' = max
+
+maxed :: Maybe Int
+maxed = liftA2 max' x y -- or max' <$> x <*> y
+#+END_SRC
+
+#+REVEAL: split
+#+BEGIN_SRC haskell
+xs = [1, 2, 3]
+ys = [4, 5, 6]
+
+x :: Maybe Integer
+x = lookup 3 $ zip xs ys
+
+y :: Maybe Integer
+y = lookup 2 $ zip xs ys
+
+summed :: Maybe Integer
+summed = pure sum <*> ((,) <$> x <*> y)
+#+END_SRC
+
+** Identity Instance
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+newtype Identity a = Identity a
+                   deriving (Eq, Ord, Show)
+
+instance Functor Identity where
+  fmap f (Identity a) = Identity (f a)
+
+instance Applicative Identity where
+  pure = Identity
+  (<*>) (Identity f) (Identity a) = Identity (f a)
+#+END_SRC
+
+** Constant Instance
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+newtype Constant a b =
+  Constant { getConstant :: a }
+  deriving (Eq, Ord, Show)
+
+instance Functor (Constant a) where
+  fmap f (Constant a) = Constant a
+
+instance Monoid a => Applicative (Constant a) where
+  pure _ = Constant mempty
+  (<*>) (Constant x) (Constant y) = Constant (mappend x y)
+#+END_SRC
+
+** Fixer Upper
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+const <$> Just "Hello" <*> pure "World"
+#+END_SRC
+
+#+ATTR_REVEAL: :frag t
+#+BEGIN_SRC haskell
+(,,,) <$> Just 90 <*> Just 10 <*> Just "Tierness" <*> pure [1, 2, 3]
+#+END_SRC
+
+** Chapter Exercises
+
+*** Signatures
+
+**** []
+#+ATTR_REVEAL: :frag
+#+BEGIN_SRC haskell
+pure  :: a -> [a]
+(<*>) :: [(a -> b)] -> [a] -> [b]
+#+END_SRC
+
+**** IO
+#+ATTR_REVEAL: :frag
+#+BEGIN_SRC haskell
+pure  :: a -> IO a
+(<*>) :: IO (a -> b) -> IO a -> IO b
+#+END_SRC
+
+**** (,) a
+#+ATTR_REVEAL: :frag
+#+BEGIN_SRC haskell
+instance Monoid a => Applicative (,) a where
+pure  :: b -> (a, b)
+(<*>) :: (a, b -> d)-> (a, b) -> (a, d)
+#+END_SRC
+
+**** (->) e
+#+ATTR_REVEAL: :frag
+#+BEGIN_SRC haskell
+instance Applicative (->) e where
+pure  :: a -> (->) a
+(<*>) :: (->) e (a -> b) -> (->) a -> (->) b
+#+END_SRC
+
+*** Instances
+
+**** ~data Pair a = Pair a a deriving Show~
+

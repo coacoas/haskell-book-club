@@ -1,13 +1,13 @@
-name:                chapter16
+name:                chapter17
 version:             0.1.0.0
-github:              "coacoas/chapter16"
+github:              "coacoas/chapter17"
 license:             BSD3
 author:              "Bill Carlson"
 maintainer:          "bill@coacoas.net"
 copyright:           "Copyright (c) 2018 Bill Carlson"
 
 extra-source-files:
-- README.md
+- readme.org
 - ChangeLog.md
 
 # Metadata used when publishing your package
@@ -17,16 +17,17 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/coacoas/chapter16#readme>
+description:         Please see the README on GitHub at <https://github.com/coacoas/chapter17#readme>
 
 dependencies:
 - base >= 4.7 && < 5
+- validation >= 0.6
 
 library:
   source-dirs: src
 
 executables:
-  chapter16-exe:
+  chapter17-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -34,10 +35,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - chapter16
+    - chapter17
 
 tests:
-  chapter16-test:
+  chapter17-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -45,5 +46,6 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - chapter16
+    - chapter17
     - QuickCheck
+    - checkers

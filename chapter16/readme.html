@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Chapter 16</title>
+<meta name="author" content="(Bill Carlson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Chapter 16</h1><h2 class="author">Bill Carlson</h2><p class="date">Created: 2018-05-25 Fri 09:58</p>
+</section>
+
+<section>
+<section id="slide-orge0fe900">
+<h2 id="orge0fe900">Exercises</h2>
+<div class="outline-text-2" id="text-orge0fe900">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org444f779">
+<h3 id="org444f779">Be Kind</h3>
+<p>
+What is the kind of <code>a</code>?
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >a -> a
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >a :: *
+</code></pre>
+</div>
+<p>
+What are the kinds of 𝑏 and 𝑇 ? (The 𝑇 is capitalized on purpose!)
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >a -> b a -> T (b a)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >b :: * -> *
+T :: * -> *
+</code></pre>
+</div>
+<p>
+What’s the kind of 𝑐?
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >c a b -> c b a
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >c :: * -> * -> *
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgfaa8953">
+<h3 id="orgfaa8953">Heavy Lifting</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >a = (+1) $ read "[1]" :: [Int]
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >a = (+1) <$> read "[1]" :: [Int]
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre><code class="haskell" >b = (++ "lol") (Just ["Hi,", "Hello"])
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >b = (fmap . fmap) (++ "lol") (Just ["Hi,", "Hello"])
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre><code class="haskell" >c = (*2) (\x -> x - 2)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >c = fmap (*2) (\x -> x - 2)
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >d = ((return '1' ++) . show) (\x -> [x, 1..3])
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >d = ((return '1' ++) . show) <$> (\x -> [x, 1..3])
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre><code class="haskell" >e :: IO Integer
+e = let ioi = readIO "1" :: IO Integer
+        changed = read ("123"++) show ioi
+    in (*3) changed
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >e :: IO Integer
+e = let ioi = readIO "1" :: IO Integer
+        changed = read <$> ("123"++) <$> show <$> ioi
+    in (*3) <$> changed
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org6a97160">
+<h3 id="org6a97160">Instances of Func</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >newtype Identity a = Identity a
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor Identity where
+  fmap f (Identity a) = Identity (f a)
+
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Pair a = Pair a a
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor Pair where
+  fmap f (Pair x y) = Pair (f x) (f y)
+
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Two a b = Two a b
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor (Two a) where
+  fmap f (Two a b) = Two a (f b)
+
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Three a b c = Three a b c
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor (Three a b) where
+  fmap f (Three a b c) = Three a b (f c)
+
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Three' a b = Three' a b b
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor (Three' a) where
+  fmap f (Three' a b c) = Three' a (f b) (f c)
+
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Four a b c d = Four a b c d
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor (Four a b c) where
+  fmap f (Four a b c d) = Four a b c (f d)
+
+</code></pre>
+</div>
+</section>
+<section >
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Four' a b = Four' a a a b
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor (Four' a) where
+  fmap f (Four' a b c d) = Four' a b c (f d)
+
+</code></pre>
+</div>
+</section>
+<section >
+<p>
+Can you implement one for this type? Why? Why not?
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Trivial = Trivial
+</code></pre>
+</div>
+<p class="fragment">
+NOPE!  Wrong kind
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf93aee0">
+<h3 id="orgf93aee0">Possibly</h3>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Possibly a = LolNope
+                | Yeppers a
+  deriving (Eq, Show)
+
+instance Functor Possibly where
+  fmap _ LolNope = LolNope
+  fmap f (Yeppers a) = Yeppers (f a)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orga13c867">
+<h3 id="orga13c867">Chapter exercises</h3>
+<div class="outline-text-3" id="text-orga13c867">
+</div>
+</section>
+<section id="slide-orgc4d382d">
+<h4 id="orgc4d382d">Valid Functor?</h4>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data Bool = False | True
+</code></pre>
+</div>
+<p class="fragment">
+Nope. Wrong kind.
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data BoolAndSomethingElse a = False' a | True' a
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor BoolAndSomethingElse where
+  fmap f (False' a) = False' (f a)
+  fmap f (True a)   = True' (f a)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre><code class="haskell" >data BoolAndMaybeSomethingElse a = Falsish | Truish a
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre class="fragment"><code class="haskell" >instance Functor BoolAndMaybeSomethingElse where
+  fmap _ Falsish    = Falsish
+  fmap f (Truish a) = Truish (f a)
+</code></pre>
+</div>
+<div class="org-src-container">
+
+<pre><code class="haskell" >newtype Mu f = InF { outF :: f (Mu f) }
+</code></pre>
+</div>
+<p class="fragment">
+I don't think so&#x2026; <code>Mu</code> is of kind <code>(* -&gt; *) -&gt; *</code>, and I'm not sure how to fix that.
+</p>
+<div class="org-src-container">
+
+<pre><code class="haskell" >import GHC.Arr
+data D = D (Array Word Word) Int Int
+</code></pre>
+</div>
+<p class="fragment">
+<code>D</code> is of kind <code>*</code>
+</p>
+</section>
+<section id="slide-orgb239adc">
+<h4 id="orgb239adc">Rearrange the Arguments</h4>
+</section>
+<section id="slide-org36d8919">
+<h4 id="org36d8919">Write The Functor</h4>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="https://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'slide', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
