@@ -1,0 +1,51 @@
+name:                chapter20
+version:             0.1.0.0
+github:              "coacoas/chapter20"
+license:             BSD3
+author:              "Bill Carlson"
+maintainer:          "bill@coacoas.net"
+copyright:           "Copyright (c) 2018 Bill Carlson"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/coacoas/chapter20#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  chapter20-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - chapter20
+
+tests:
+  chapter20-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - chapter20
+    - QuickCheck
+    - checkers
+    - hspec
