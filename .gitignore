@@ -2,3 +2,8 @@
 !.gitignore
 dist
 !/chapter*
+*.o
+*.hi
+*.prof
+**/#*#
+

@@ -1,0 +1,6 @@
+.stack-work/
+chapter25.cabal
+*.sbt
+project/
+target/
+**/*.scala

@@ -1,0 +1,5 @@
+stack-work/
+chapter28.cabal
+*~
+app/*
+!app/*.hs
