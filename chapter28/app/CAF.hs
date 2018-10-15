@@ -1,4 +1,4 @@
-module Main where
+module CAF where
 
 incdInts :: [Integer]
 incdInts = map (+1) [1..]

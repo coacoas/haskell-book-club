@@ -1,4 +1,4 @@
-module Main where
+module ArrayVVector where
 
 import Criterion.Main
 import qualified Data.Vector as V

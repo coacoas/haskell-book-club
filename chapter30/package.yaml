@@ -1,6 +1,6 @@
-name:                chapter28
+name:                chapter30
 version:             0.1.0.0
-github:              "coacoas/chapter28"
+github:              "coacoas/chapter30"
 license:             BSD3
 author:              "Bill Carlson"
 maintainer:          "bill@coacoas.net"
@@ -17,21 +17,17 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/coacoas/chapter28#readme>
+description:         Please see the README on GitHub at <https://github.com/coacoas/chapter30#readme>
 
 dependencies:
 - base >= 4.7 && < 5
-- criterion >= 1.4.1.0
-- containers
-- text
-- validation
-- vector
+- random
 
 library:
   source-dirs: src
 
 executables:
-  chapter28-exe:
+  chapter30-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -39,10 +35,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - chapter28
+    - chapter30
 
 tests:
-  chapter28-test:
+  chapter30-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -50,4 +46,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - chapter28
+    - chapter30

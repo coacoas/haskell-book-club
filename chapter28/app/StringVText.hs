@@ -1,4 +1,4 @@
-module Main where
+module StringVText where
 
 import Control.Monad
 import qualified Data.Text as T

@@ -1,4 +1,4 @@
-module Main where
+module ListVMap where
 
 import Criterion.Main
 import qualified Data.Map as M

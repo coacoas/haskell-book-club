@@ -1,4 +1,4 @@
-module Main where
+module Fusion where
 
 import Criterion.Main
 import Control.Monad.ST

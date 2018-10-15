@@ -1,7 +1,5 @@
 module DList where
 
-import Criterion.Main
-
 newtype DList a = DL { unDL :: [a]->[a] }
 
 empty :: DList a

@@ -1,4 +1,4 @@
-module Main where
+module ProfilingTime where
 
 f :: IO()
 f = do

@@ -1,4 +1,7 @@
-module Cipher where
+module Cipher ( vignere
+              , encrypt
+              , decrypt
+              ) where
 
 import Data.Char
 
@@ -31,22 +34,22 @@ ceasar n = map (ceasarChar n)
 unCeasar :: Int -> [Char] -> [Char]  
 unCeasar n = ceasar (-n)
 
-zipConditionally :: (Char -> Bool) -> [Char] -> [Char] -> [(Char, Char)]
+zipConditionally :: (a -> Bool) -> [a] -> [a] -> [(a, a)]
 zipConditionally _ [] _ = []
 zipConditionally _ _ [] = []
 zipConditionally p (x:xs) (y:ys) =
   if (p x) then (x,y):(zipConditionally p xs ys)
   else (x,x):(zipConditionally p xs (y:ys))
 
-vignere :: (Int -> Int) -> [Char] -> [Char] -> [Char]
+vignere :: (Int -> Int) -> String -> String -> String
 vignere f key message = fmap go aligned
   where aligned = zipConditionally isLetter message (cycle key)
         go (msgChar, keyChar) =
           let diff = f $ (ord $ toLower keyChar) - (ord 'a')
           in ceasarChar diff msgChar
 
-encrypt :: [Char] -> [Char] -> [Char]
+encrypt :: String -> String -> String
 encrypt = vignere id
 
-decrypt :: [Char] -> [Char] -> [Char]
+decrypt :: String -> String -> String
 decrypt = vignere negate
